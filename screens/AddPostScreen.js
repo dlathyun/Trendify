@@ -53,7 +53,7 @@ const AddPostScreen = () => {
 
       setCaption('')
       setImg('')
-      
+      itemList.length = 0
 
   }
   const uploadImage = async () => {

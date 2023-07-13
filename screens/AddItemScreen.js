@@ -95,7 +95,7 @@ const AddItemScreen = () => {
         <TextInput
           placeholder="Enter here"
           value={title}
-          onChangeText={text => setTitle(text.toUpperCase())}
+          onChangeText={text => setTitle(text)}
           style={styles.inputText}
         />
       </View>
