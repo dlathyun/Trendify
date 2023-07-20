@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, VirtualizedList } from 'react-native';
-import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer } from 'firebase/firestore';
+import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, query, where, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+
 
 
 const HomeScreen = ({navigation}) => {
@@ -10,9 +13,15 @@ const HomeScreen = ({navigation}) => {
 
   const [userData, setUserData] = useState(null);
 
+  const [likedOr, setLikedOr] = useState(false)
+
+  let numLikes = 0
+
     const auth = getAuth()
     const user = auth.currentUser
+    const userUID = user?.uid.toString()
     const [loading, setLoading] = useState(true);
+    
 
     // const getUser = async() => {
     //   const userDoc = doc(db, 'users', user.uid)
@@ -24,18 +33,28 @@ const HomeScreen = ({navigation}) => {
     
 
     const fetchPosts = async () => {
-        const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
-        const snapshot = await getCountFromServer(itemColl);
-        const numItems = snapshot.data().count + 1
+        // const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
+        // const snapshot = await getCountFromServer(itemColl);
+        // const numItems = snapshot.data().count + 1
         //const itemRef = doc(db, 'users', user.uid, 'items') it shld be collection instead
         
         try {
+
+          // const wholePosts = query(collectionGroup(db, 'ownPosts'), where('user', '!=', user?.uid.toString()));
+          // const querySnapshot = await getDocs(wholePosts);
+          const q = query(collection(db, "wholePosts"), where("user", "!=", user?.uid.toString()));
+          const querySnapshot = await getDocs(q)
           const list = [];
-          const querySnapshot = await getDocs(itemColl)
           querySnapshot.forEach((doc) => {
             console.log(doc.id, " => ", doc.data())
             list.push(doc.data())
-        });
+          })
+        //   const list = [];
+        //   const querySnapshot = await getDocs(itemColl)
+        //   querySnapshot.forEach((doc) => {
+        //     console.log(doc.id, " => ", doc.data())
+        //     list.push(doc.data())
+        // });
 
         
           //need to get post from firebase
@@ -56,33 +75,94 @@ const HomeScreen = ({navigation}) => {
         fetchPosts();
         navigation.addListener("focus", () => setLoading(!loading));
       }, [navigation, loading]);
-    
+  
+    // const checkLiked = async({postID, userID}) => {
+    //   const querySnapshot = await getDocs(collection(db, 'wholePosts', postID.toString(), 'likes'));
+    //   querySnapshot.forEach((doc) => {
+    //     // doc.data() is never undefined for query doc snapshots
+    //     if (doc.id.toString() == userID) {
+    //       return true
+    //     }
+    //   });
+    //   return false
+    // }
 
-      const handleDelete = () => {};
+    const onPressLike = async ({postID, userID}) => {
+      const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
+      setDoc(likeRef, {
+      })
+      setLikedOr(true)
+      const postRef = doc(db, 'wholePosts', postID.toString())
+      const postSnapShot = await getDoc(postRef)
+      const ori = postSnapShot.data().likesNum
+      updateDoc(postRef, {
+        likesNum: ori + 1
+      })
+      numLikes++
+    }
+    
+    const onPressDislike = async ({postID, userID}) => {
+      const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
+      deleteDoc(likeRef)
+      setLikedOr(false)
+      const postRef = doc(db, 'wholePosts', postID.toString())
+      const postSnapShot = await getDoc(postRef)
+      const ori = postSnapShot.data().likesNum
+      updateDoc(postRef, {
+        likesNum: ori - 1
+      })
+      numLikes--
+    }
+    
   const renderPost = ({ item }) => (
     <View style={styles.postContainer}>
-      <View style={styles.postHeader}>
-        <Image style={styles.userImg} source={{ uri: item.userImg }} />
-        <Text style={styles.username}>{item.username}</Text>
-      </View>
+      
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('OtherProfile', {
+          user: item.user
+        })
+      }}>
+        <View style={styles.postHeader}>
+          <Image style={styles.userImg} source={{ uri: item.userImgURL }} />
+          <Text style={styles.username}>{item.username}</Text>
+        </View>
+      </TouchableOpacity>
 
       
       <TouchableOpacity onPress={() => {
       navigation.navigate('Post', {
         caption: item.postCaption,
-        image: item.postImg,
+        image: item.postImgURL,
         user: item.user,
-        itemList: item.itemList
+        itemList: item.itemList,
+        username: item.username,
+        userImgURL: item.userImgURL,
+        postNum: item.postNum,
+        likesNum: item.likesNum,
+        liked: item.liked,
       })}
     }>
-      <Image source={{ uri: item.postImg }} style={styles.postImage} />
+      <Image source={{ uri: item.postImgURL }} style={styles.postImage} />
       </TouchableOpacity>
       <View style={styles.postFooter}>
-        <Text style={styles.likes}>{item.likes} likes</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={styles.likes}>{item.likesNum} likes</Text>
+          {
+            likedOr
+              ? (<TouchableOpacity onPress={() => onPressDislike({postID: item.postNum, userID: userUID})} style={{marginRight: 10}}>
+                  <Ionicons name="heart" color={'red'} size={30} />
+                </TouchableOpacity>)
+              : (<TouchableOpacity onPress={() => onPressLike({postID: item.postNum, userID: userUID})} style={{marginRight: 10}}>
+                  <Ionicons name="heart-outline" color={'black'} size={30} />
+                </TouchableOpacity>)
+          }
+        </View>
+        
         <Text style={styles.caption}>{'"' + item.postCaption + '"'}</Text>
       </View>
     </View>
   );
+
 
 
   return (

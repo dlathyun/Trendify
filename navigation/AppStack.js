@@ -17,6 +17,15 @@ import AddPostScreen from '../screens/AddPostScreen';
 import PostScreen from '../screens/PostScreen';
 import ChatScreen from '../screens/ChatScreen';
 import HomeScreen from '../screens/HomeScreen';
+import OtherProfileScreen from '../screens/OtherProfileScreen';
+import OtherShopScreen from '../screens/OtherShopScreen';
+import RequestScreen from '../screens/RequestScreen';
+
+import { getAuth } from 'firebase/auth';
+import EditPostScreen from '../screens/EditPostScreen';
+import ViewRequestScreen from '../screens/ViewRequestScreen';
+const auth = getAuth()
+const user = auth.currentUser
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,14 +73,51 @@ const FeedStack = ({navigation}) => (
         },
       }}
     />
+    <Stack.Screen
+      name="OtherProfile"
+      component={OtherProfileScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="OtherShop"
+      component={OtherShopScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Request"
+      component={RequestScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    
+    {/* <Stack.Screen
+      name="Chat"
+      component={ChatScreen}
+      options={{
+        headerTitle: 'Chat',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    /> */}
   </Stack.Navigator>
 );
 
-const ProfileStack = ({navigation}) => (
+const ProfileStack = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Profile"
       component={ProfileScreen}
+      initialParams={{user: user}}
       options={{
         headerShown: false,
       }}
@@ -91,6 +137,13 @@ const ProfileStack = ({navigation}) => (
       }}
     />
     <Stack.Screen
+      name="ViewRequest"
+      component={ViewRequestScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
       name="Post"
       component={PostScreen}
       options={{
@@ -102,6 +155,13 @@ const ProfileStack = ({navigation}) => (
           shadowColor: '#fff',
           elevation: 0,
         },
+      }}
+    />
+    <Stack.Screen
+      name="EditPost"
+      component={EditPostScreen}
+      options={{
+        headerShown: false,
       }}
     />
     {/* <Stack.Screen
@@ -158,7 +218,7 @@ const ShopStack = ({navigation}) => (
         },
       }}
     />
-    {/* <Stack.Screen
+    <Stack.Screen
       name="Chat"
       component={ChatScreen}
       options={{
@@ -171,7 +231,7 @@ const ShopStack = ({navigation}) => (
           elevation: 0,
         },
       }}
-    /> */}
+    />
   </Stack.Navigator>
 );
 

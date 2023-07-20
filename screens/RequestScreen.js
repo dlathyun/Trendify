@@ -10,49 +10,20 @@ import { Alert } from 'react-native';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
-const AddItemScreen = () => {
+const RequestScreen = ({route}) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
   const [additionalNote, setAdditionalNote] = useState('')
-  const [img, setImg] = useState('')
+  const [imgURI, setImgURI] = useState('')
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
 
-  const auth = getAuth()
-  const user = auth.currentUser
+  // const auth = getAuth()
+  // const user = auth.currentUser
+  const { postOwnerUID, currentUserUID, postNum,} = route.params
 
-  const handleAddItem = async() => {
-    //should i call get user..?
-    
-    let imgUrl = await uploadImage(img, 'na', true);
   
-      // if( imgUrl == null && userData.userImg ) {
-      //   imgUrl = userData.userImg;
-      // }
-      
-      const itemColl = collection(db, 'users', user.uid, 'items')
-      const snapshot = await getCountFromServer(itemColl);
-      const numItems = snapshot.data().count + 1
-      const itemRef = doc(db, 'users', user.uid, 'items', numItems.toString())
-      console.log(title)
-      await setDoc(itemRef, {
-        itemTitle: title,
-        itemDescription: description,
-        itemPrice: price,
-        itemAdditionalNote: additionalNote,
-        itemImg: imgUrl
-      })
-
-      setTitle('')
-      setDescription('')
-      setPrice('')
-      setAdditionalNote('')
-      setImg('')
-
-      Alert.alert("Item successfully added!")
-
-  }
   const uploadImage = async (uri, name, onProgress) => {
     const metadata = {
       contentType: 'image/jpeg'
@@ -60,11 +31,11 @@ const AddItemScreen = () => {
     
     // Upload file and metadata to the object 'images/mountains.jpg'
     const storage = getStorage()
-    const storageRef = ref(storage, 'itemImg');
+    const storageRef = ref(storage, 'requestImg');
     //const file = getBlobFroUri(imageURI)
     const fetchResponse = await fetch(uri)
     const theBlob = await fetchResponse.blob()
-    const imageRef = ref(storage, `itemImg/${user.uid}`)
+    const imageRef = ref(storage, `requestImg/${currentUserUID}`)
     const uploadTask = uploadBytesResumable(imageRef, theBlob, metadata);
 
     setUploading(true);
@@ -98,19 +69,45 @@ const AddItemScreen = () => {
     })
 
     if (!result.canceled) {
-      //setImage(result.assets[0].uri)
+      setImgURI(result.assets[0].uri)
       const source = {uri: result.assets[0].uri}
       console.log(source)
-      setImg(result.assets[0].uri)
     } else {
       alert("Image not selected.")
     }
   }
 
+  const handleAddRequest = async() => {
+    //should i call get user..?
+    
+    let imgUrl = await uploadImage(imgURI, 'na', true);
+    console.log(postNum)
+    const itemRef = doc(db, 'users', postOwnerUID.toString(), 'requests', postNum.toString())
+      console.log(title)
+      await setDoc(itemRef, {
+        itemTitle: title,
+        itemDescription: description,
+        itemPrice: price,
+        itemAdditionalNote: additionalNote,
+        itemImg: imgUrl,
+        itemOwner: currentUserUID,
+        itemPost: postNum.toString(),
+      })
+
+      setTitle('')
+      setDescription('')
+      setPrice('')
+      setAdditionalNote('')
+      setImgURI('')
+
+      Alert.alert("Item successfully requested!")
+
+  }
+
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-    <ScrollView style={{backgroundColor: '#ecf0f1'}}>
+    
     <KeyboardAvoidingView
       style={styles.container}
       behavior="padding"
@@ -172,13 +169,13 @@ const AddItemScreen = () => {
             Click here to upload!
           </Text>
         </TouchableOpacity>
-        {img && <Image source={{ uri: img }} style={{ width: 200, height: 200 }} />}
+        {imgURI && <Image source={{ uri: imgURI }} style={{ width: 200, height: 200 }} />}
       </View>
       <View style={styles.indivContainer}>
         <TouchableOpacity
           activeOpacity={0.5}
           style={styles.submitContainer}
-          onPress={handleAddItem}>
+          onPress={handleAddRequest}>
           <Text style={styles.uploadText}>
             Submit
           </Text>
@@ -186,7 +183,7 @@ const AddItemScreen = () => {
       </View>
     </View>
     </KeyboardAvoidingView>
-    </ScrollView>
+    
     </SafeAreaView>
   );
 }
@@ -259,4 +256,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddItemScreen
+export default RequestScreen

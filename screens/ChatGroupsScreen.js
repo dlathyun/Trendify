@@ -8,7 +8,6 @@ const ChatGroupsScreen = () => {
   useEffect(() => {
     const firestore = getFirestore();
     const chatGroupsRef = collection(firestore, 'chatGroups');
-
     const fetchChatGroups = async () => {
       try {
         const snapshot = await getDocs(chatGroupsRef);

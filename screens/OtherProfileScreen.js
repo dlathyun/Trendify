@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext} from 'react';
-import { Text, View, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList } from 'react-native';
 import Constants from 'expo-constants';
 //import { AuthContext } from "@navigation/AuthProvider";
 import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer } from 'firebase/firestore';
@@ -23,7 +23,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 
   
-const ProfileScreen = ({navigation}) => {
+const OtherProfileScreen = ({navigation, route}) => {
 
   const renderPost = ({ item }) => (
     <TouchableOpacity onPress={() => {
@@ -51,27 +51,21 @@ const ProfileScreen = ({navigation}) => {
     const [userData, setUserData] = useState(null);
 
     const auth = getAuth()
-    const user = auth.currentUser
+    const {user} = route.params
 
     const [posts, setPosts] = useState([])
     const [loading, setLoading] = useState(true);
-    const [numRequest, setNumRequest] = useState(0)
- 
+
     const getUser = async() => {
-      const userDoc = doc(db, 'users', user.uid)
+      const userDoc = doc(db, 'users', user)
       const userSnapShot = await getDoc(userDoc)
       setUserData(userSnapShot.data())
-
-      const requestColl = collection(db, 'users', user.uid.toString(), 'requests')
-      const requestSnapShot = await getCountFromServer(requestColl)
-      const num = requestSnapShot.data().count
-      setNumRequest(num)
     }
   
     
 
     const fetchPosts = async () => {
-        const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
+        const itemColl = collection(db, 'posts', user, 'ownPosts')
         const snapshot = await getCountFromServer(itemColl);
         const numItems = snapshot.data().count + 1
         //const itemRef = doc(db, 'users', user.uid, 'items') it shld be collection instead
@@ -104,12 +98,7 @@ const ProfileScreen = ({navigation}) => {
         navigation.addListener("focus", () => setLoading(!loading));
       }, [navigation, loading]);
     
-    const handleSignOut = () => {
-      signOut(auth)
-      .then(() => Alert.alert('Signed out successfully!'));
-    };
-
-    
+    const handleDelete = () => {};
 
     
     
@@ -133,28 +122,18 @@ const ProfileScreen = ({navigation}) => {
                 <TouchableOpacity 
                     style={styles.userButton} 
                     onPress={() => {
-                        navigation.navigate('Edit Profile')
-                    }}>
+                        navigation.navigate('OtherShop', {
+                        user: user
+                    })}}>
                     <Text style={styles.userButtonText}>
-                        Edit 
+                        View My Shop!
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.userButton} 
-                    onPress={handleSignOut}>
+                    onPress={() => {{navigation.navigate('Chat')}}}>
                     <Text style={styles.userButtonText}>
-                    Logout 
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    style={styles.userButton} 
-                    onPress={() => {
-                      navigation.navigate('ViewRequest', {
-                        userUID: user?.uid.toString()
-                      })
-                    }}>
-                    <Text style={styles.userButtonText}>
-                    {numRequest + " Request(s)"} 
+                        Chat with me!
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -221,10 +200,10 @@ const ProfileScreen = ({navigation}) => {
       paddingVertical: 8,
       paddingHorizontal: 12,
       marginHorizontal: 5,
-      backgroundColor: 'grey',
+      backgroundColor: '#b0c4de',
     },
     userButtonText: {
-      color: 'white',
+      color: 'black',
     },
     postWrapper: {
       flex: 1,
@@ -242,4 +221,4 @@ const ProfileScreen = ({navigation}) => {
     
   });
 
-export default ProfileScreen
+export default OtherProfileScreen

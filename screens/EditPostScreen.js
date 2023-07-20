@@ -11,30 +11,17 @@ import SearchableDropdown from 'react-native-searchable-dropdown'
 import { useEffect } from 'react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const itemOptions = [
-    // name key is must. It is to show the text in front
-    {id: 1, name: 'Shirt'},
-    {id: 2, name: 'Pants'},
-    {id: 3, name: 'Skirts'},
-    {id: 4, name: 'Shoes'},
-    {id: 5, name: 'Accessories'},
-    {id: 6, name: 'Hat/Cap'},
-    {id: 7, name: 'Socks'},
-    {id: 8, name: 'Mask'},
-    {id: 9, name: 'Bag'},
-    {id: 10, name: 'Jacket'},
-];
-const itemList =[]
-const AddPostScreen = () => {
+
+let itemList =[]
+const EditPostScreen = ({route}) => {
   const [caption, setCaption] = useState('')
-  const [imageURI, setImageURI] = useState('')
   const [userData, setUserData] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
     
     
-
+  const { postID } = route.params
   const auth = getAuth()
   const user = auth.currentUser
 
@@ -44,34 +31,39 @@ const AddPostScreen = () => {
     setUserData(userSnapShot.data())
   }
 
+  const getOriData = async() => {
+    const postRef = doc(db, 'wholePosts', postID.toString())
+    const postSnapShot = await getDoc(postRef)
+    const oriCaption = postSnapShot.data().postCaption
+    const oriItemList = postSnapShot.data().itemList
+    setCaption(oriCaption)
+    itemList = oriItemList
+  }
+
   useEffect(() => {
     getUser();
+    getOriData()
   });
 
-  const handleAddPost = async() => {
-    //should i call get user..?
-    
-    let imgUrl = await uploadImage(imageURI, 'random', true);
   
-      // if( imgUrl == null && userData.userImg ) {
-      //   imgUrl = userData.;
-      // }
-      
+
+  const handleEditPost = async() => {
+    
       const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
       const snapshot = await getCountFromServer(itemColl);
       const numItems = snapshot.data().count + 1
       const itemRef = doc(db, 'posts', user.uid, 'ownPosts', numItems.toString())
       //console.log(caption)
-      await setDoc(itemRef, {
+      await updateDoc(itemRef, {
         postCaption: caption,
-        postImgURL: imgUrl,
-        user: user.uid,
+        // postImgURL: imgUrl,
+        // user: user.uid,
         itemList: itemList,
-        username: userData.username,
-        userImgURL: userData.userImgURL,
-        postNum: numItems,
-        likesNum: 0,
-        liked: false,
+        // username: userData.username,
+        // userImgURL: userData.userImgURL,
+        // postNum: numItems,
+        // likesNum: 0,
+        // liked: false,
       })
 
       
@@ -79,20 +71,20 @@ const AddPostScreen = () => {
       const postSnapShot = await getCountFromServer(postColl)
       const numPosts = snapshot.data().count + 1
       const postRef = doc(db, 'wholePosts', numPosts.toString())
-      await setDoc(postRef, {
+      await updateDoc(postRef, {
         postCaption: caption,
-        postImgURL: imgUrl,
-        user: user.uid,
+        // postImgURL: imgUrl,
+        // user: user.uid,
         itemList: itemList,
-        username: userData.username,
-        userImgURL: userData.userImgURL,
-        postNum: numItems,
-        likesNum: 0,
-        liked: false,
+        // username: userData.username,
+        // userImgURL: userData.userImgURL,
+        // postNum: numItems,
+        // likesNum: 0,
+        // liked: false,
       })
 
       if (caption == '') {
-        setErrorMessage("Email cannot be empty!")
+        setErrorMessage("Caption cannot be empty!")
         return Alert.alert(errorMessage)
       }
       if (itemList.length == 0) {
@@ -101,68 +93,11 @@ const AddPostScreen = () => {
       } 
 
       setCaption('')
-      setImageURI('')
       itemList.length = 0
       
       Alert.alert("Post uploaded!")
   }
-  const uploadImage = async (uri, name, onProgress) => {
-    const metadata = {
-      contentType: 'image/jpeg'
-    };
-    
-    // Upload file and metadata to the object 'images/mountains.jpg'
-    const storage = getStorage()
-    const storageRef = ref(storage, 'postImg');
-    //const file = getBlobFroUri(imageURI)
-    const fetchResponse = await fetch(uri)
-    const theBlob = await fetchResponse.blob()
-    const imageRef = ref(storage, `postImg/${user.uid}`)
-    const uploadTask = uploadBytesResumable(imageRef, theBlob, metadata);
-
-    setUploading(true);
-    setTransferred(0);
-    uploadTask.on('state_changed', (taskSnapshot) => {
-      console.log(
-        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
-      );
-
-      setTransferred(
-        Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
-          100,
-      );
-    });
-
-      await uploadTask;
-
-      const url = await getDownloadURL(imageRef);
-
-      setUploading(false);
-
-      return url;
-  }
-
-  const pickImageAsync = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
-      aspect: [3, 4],
-    })
-
-    if (!result.canceled) {
-      //setImage(result.assets[0].uri)
-      const source = {uri: result.assets[0].uri}
-      console.log(source)
-      setImageURI(result.assets[0].uri)
-    } else {
-      alert("Image not selected.")
-    }
-  }
-
   
-
-
   const [item, setItem] = useState('')
   const [link, setLink] = useState('')
   
@@ -176,7 +111,7 @@ const AddPostScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-        <ScrollView style={{backgroundColor: '#ecf0f1'}}>
+        
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior="padding"
@@ -187,25 +122,11 @@ const AddPostScreen = () => {
           Caption
         </Text>
         <TextInput
-          placeholder="Enter here"
+          placeholder={caption}
           value={caption}
           onChangeText={text => setCaption(text)}
           style={styles.inputText}
         />
-      </View>
-      <View style={styles.indivContainer}>
-        <Text style={styles.optionText}>
-          Upload Photo
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={styles.uploadContainer}
-          onPress={pickImageAsync}>
-          <Text style={styles.uploadText}>
-            Upload here!
-          </Text>
-        </TouchableOpacity>
-        {imageURI && <Image source={{ uri: imageURI }} style={{ width: 300, height: 400 }} />}
       </View>
       <View style={styles.indivContainer}>
         <Text style={styles.optionText}>
@@ -260,7 +181,7 @@ const AddPostScreen = () => {
         <TouchableOpacity
           activeOpacity={0.5}
           style={styles.submitContainer}
-          onPress={handleAddPost}>
+          onPress={handleEditPost}>
           <Text style={styles.uploadText}>
             Submit
           </Text>
@@ -268,7 +189,7 @@ const AddPostScreen = () => {
       </View>
     </View>
     </KeyboardAvoidingView>
-    </ScrollView>
+    
     </SafeAreaView>
   );
   }
@@ -371,4 +292,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddPostScreen
+export default EditPostScreen
