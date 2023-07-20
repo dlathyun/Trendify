@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { Constants } from "expo-constants"
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const ItemScreen = ({route}) => {
+const ItemScreen = ({route, navigation}) => {
     const { title, description, price, additionalNote, img, user } = route.params;
     return (
         <SafeAreaView style={styles.safeContainer}>
@@ -44,7 +44,7 @@ const ItemScreen = ({route}) => {
                 <TouchableOpacity
                     activeOpacity={0.5}
                     style={styles.submitContainer}
-                    onPress={()=>{}}>
+                    onPress={()=>{navigation.navigate('Chat')}}>
                     <Text style={styles.uploadText}>
                         Chat & Buy!
                     </Text>

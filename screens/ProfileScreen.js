@@ -60,7 +60,7 @@ const ProfileScreen = ({navigation, route}) => {
     
 
     const fetchPosts = async () => {
-        const itemColl = collection(db, 'users', user.uid, 'posts')
+        const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
         const snapshot = await getCountFromServer(itemColl);
         const numItems = snapshot.data().count + 1
         //const itemRef = doc(db, 'users', user.uid, 'items') it shld be collection instead

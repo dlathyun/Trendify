@@ -83,7 +83,7 @@ const LoginScreen = ({navigation}) => {
                     onPress={() => navigation.navigate('Register')}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>Click here to register</Text> 
+                    <Text style={styles.buttonText}>Create Account</Text> 
                 </TouchableOpacity>
             </View>
             <View style={styles.emptyContainer}>

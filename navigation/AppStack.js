@@ -15,69 +15,57 @@ import ShopScreen from '../screens/ShopScreen';
 import ItemScreen from '../screens/ItemScreen';
 import AddPostScreen from '../screens/AddPostScreen';
 import PostScreen from '../screens/PostScreen';
+import ChatScreen from '../screens/ChatScreen';
+import HomeScreen from '../screens/HomeScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// const FeedStack = ({navigation}) => (
-//   <Stack.Navigator>
-//     <Stack.Screen
-//       name="Trendify"
-//       component={HomeScreen}
-//       options={{
-//         headerTitleAlign: 'center',
-//         headerTitleStyle: {
-//           color: '#2e64e5',
-//           fontFamily: 'Kufam-SemiBoldItalic',
-//           fontSize: 18,
-//         },
-//         headerStyle: {
-//           shadowColor: '#fff',
-//           elevation: 0,
-//         },
-//         headerRight: () => (
-//           <View style={{marginRight: 10}}>
-//             <Button
-//               name="plus"
-//               size={22}
-//               backgroundColor="#fff"
-//               color="#2e64e5"
-//               onPress={() => navigation.navigate('AddPost')}
-//             />
-//           </View>
-//         ),
-//       }}
-//     />
-//     <Stack.Screen
-//       name="Add Post"
-//       component={AddPostScreen}
-//       options={{
-//         title: '',
-//         headerTitleAlign: 'center',
-//         headerStyle: {
-//           backgroundColor: '#2e64e515',
-//           shadowColor: '#2e64e515',
-//           elevation: 0,
-//         },
-        
-//       }}
-//     />
-//     <Stack.Screen
-//       name="Home Profile"
-//       component={ProfileScreen}
-//       options={{
-//         title: '',
-//         headerTitleAlign: 'center',
-//         headerStyle: {
-//           backgroundColor: '#fff',
-//           shadowColor: '#fff',
-//           elevation: 0,
-//         },
-  
-//       }}
-//     />
-//   </Stack.Navigator>
-// );
+const FeedStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          color: '#2e64e5',
+          fontFamily: 'Kufam-SemiBoldItalic',
+          fontSize: 18,
+        },
+        headerStyle: {
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+        // headerRight: () => (
+        //   <View style={{marginRight: 10}}>
+        //     <Button
+        //       name="plus"
+        //       size={22}
+        //       backgroundColor="#fff"
+        //       color="#2e64e5"
+        //       onPress={() => navigation.navigate('AddPost')}
+        //     />
+        //   </View>
+        // ),
+      }}
+    />
+    <Stack.Screen
+      name="Post"
+      component={PostScreen}
+      options={{
+        headerTitle: 'Post',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+  </Stack.Navigator>
+);
 
 const ProfileStack = ({navigation}) => (
   <Stack.Navigator>
@@ -170,6 +158,20 @@ const ShopStack = ({navigation}) => (
         },
       }}
     />
+    {/* <Stack.Screen
+      name="Chat"
+      component={ChatScreen}
+      options={{
+        headerTitle: 'Chat',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    /> */}
   </Stack.Navigator>
 );
 
@@ -201,6 +203,19 @@ const AppStack = () => {
         })}
       /> */}
 
+    <Tab.Screen
+        name="Home"
+        component={FeedStack}
+        options={{
+          // tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <View>
+              <Ionicons name="home-outline" color={color} size={size} />
+            </View>
+ 
+          ),
+        }}
+      />
       <Tab.Screen
         name="Add Post"
         component={AddPostScreen}

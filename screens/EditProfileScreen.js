@@ -12,6 +12,8 @@ import ProfileScreen from './ProfileScreen';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ScrollView } from 'react-native-gesture-handler';
 
+import { Alert } from 'react-native';
+
 
 
 
@@ -61,6 +63,11 @@ const EditProfileScreen = () => {
           aboutUser: about,
           userImg: imgUrl,
         })
+
+        setName('')
+        setAbout('')
+
+        Alert.alert("Updated Profile!")
     }
 
     const uploadImage = async () => {

@@ -11,10 +11,15 @@ const logo = require('../assets/logo.png')
 const RegisterScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassWord] = useState('')
+    const [name, setName] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [loading, setLoading] = useState('')
     const auth = getAuth()
     const handleSignUp = async () => {
+        if (name == '') {
+            setErrorMessage("Name cannot be empty!")
+            return Alert.alert(errorMessage)
+        }
         if (email == '') {
             setErrorMessage("Email cannot be empty!")
             return Alert.alert(errorMessage)
@@ -50,6 +55,12 @@ const RegisterScreen = () => {
             />
             <View style= {styles.inputContainer}>
                 <TextInput 
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={text => setName(text)}
+                    style={styles.input}
+                />
+                <TextInput 
                     placeholder="Email"
                     value={email}
                     onChangeText={text => setEmail(text)}
@@ -69,7 +80,7 @@ const RegisterScreen = () => {
                     onPress={handleSignUp}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>Submit to register!</Text> 
+                    <Text style={styles.buttonText}>Register here!</Text> 
                 </TouchableOpacity>
             </View>
             <View style={styles.emptyContainer} />

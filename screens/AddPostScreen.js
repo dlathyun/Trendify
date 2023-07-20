@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { updateDoc, doc, getDoc, setDoc, getCountFromServer, collection } from 'firebase/firestore';
 import { Alert } from 'react-native';
 import SearchableDropdown from 'react-native-searchable-dropdown'
+import { useEffect } from 'react';
 
 const itemOptions = [
     // name key is must. It is to show the text in front
@@ -26,9 +27,23 @@ const itemList =[]
 const AddPostScreen = () => {
   const [caption, setCaption] = useState('')
   const [img, setImg] = useState('')
+  const [userData, setUserData] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+    
+    
 
   const auth = getAuth()
   const user = auth.currentUser
+
+  const getUser = async() => {
+    const userDoc = doc(db, 'users', user.uid)
+    const userSnapShot = await getDoc(userDoc)
+    setUserData(userSnapShot.data())
+  }
+
+  useEffect(() => {
+    getUser();
+  });
 
   const handleAddPost = async() => {
     //should i call get user..?
@@ -39,22 +54,34 @@ const AddPostScreen = () => {
       //   imgUrl = userData.userImg;
       // }
       
-      const itemColl = collection(db, 'users', user.uid, 'posts')
+      const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
       const snapshot = await getCountFromServer(itemColl);
       const numItems = snapshot.data().count + 1
-      const itemRef = doc(db, 'users', user.uid, 'posts', numItems.toString())
+      const itemRef = doc(db, 'posts', user.uid, 'ownPosts', numItems.toString())
       console.log(caption)
       await setDoc(itemRef, {
         postCaption: caption,
         postImg: img,
         user: user.uid,
-        itemList: itemList
+        itemList: itemList,
+        username: userData.username,
+        userImg: userData.userImg,
       })
+
+      if (caption == '') {
+        setErrorMessage("Email cannot be empty!")
+        return Alert.alert(errorMessage)
+      }
+      if (itemList.length == 0) {
+          setErrorMessage("Password cannot be empty!")
+          return Alert.alert(errorMessage)
+      } 
 
       setCaption('')
       setImg('')
       itemList.length = 0
-
+      
+      Alert.alert("Post uploaded!")
   }
   const uploadImage = async () => {
     // setUploading(true)
@@ -127,7 +154,7 @@ const AddPostScreen = () => {
           style={styles.uploadContainer}
           onPress={pickImageAsync}>
           <Text style={styles.uploadText}>
-            Click here to upload!
+            Upload here!
           </Text>
         </TouchableOpacity>
         {img && <Image source={{ uri: img }} style={{ width: 300, height: 400 }} />}
@@ -217,13 +244,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',   
   },
   indivContainer: {
-    marginTop: 15, 
+    marginTop: 10, 
     marginBottom: 15,
   },
   uploadContainer: {
-    width: '65%',
+    width: '100%',
     backgroundColor: '#20b2aa',
-    padding: 3,
+    padding: 8,
     marginTop: 5,
     borderRadius: 10,
     marginBottom: 15,
@@ -287,6 +314,7 @@ const styles = StyleSheet.create({
     color: `white`,
     fontWeight: '700',
     fontSize: 16,
+    alignSelf: "center",
   },
   addedItemText: {
     fontWeight: '500',
