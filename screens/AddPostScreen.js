@@ -247,13 +247,13 @@ const AddPostScreen = () => {
       </View>
       
       <View style={styles.indivContainer}>
-        <FlatList
-            data={itemList}
-            renderItem={({item}) => 
-              <Text style={styles.addedItemText}>
-                {item.itemType + " - " + item.itemLink}
-              </Text>}
-        />
+        {itemList.map((item, index) => (
+              <View key={index}>
+                <Text style={styles.addedItemText}>
+                    {item.itemType + " - " + item.itemLink}
+                </Text>
+              </View>
+        ))}
       </View>
       
       <View style={styles.indivContainer}>

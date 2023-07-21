@@ -107,7 +107,7 @@ const RequestScreen = ({route}) => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-    
+    <ScrollView>
     <KeyboardAvoidingView
       style={styles.container}
       behavior="padding"
@@ -183,7 +183,7 @@ const RequestScreen = ({route}) => {
       </View>
     </View>
     </KeyboardAvoidingView>
-    
+    </ScrollView>
     </SafeAreaView>
   );
 }
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#ecf0f1',
   },
   inputContainer: {
     flex: 1,

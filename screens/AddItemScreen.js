@@ -110,7 +110,7 @@ const AddItemScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-    <ScrollView style={{backgroundColor: '#ecf0f1'}}>
+    {/* <ScrollView style={{backgroundColor: '#ecf0f1'}}> */}
     <KeyboardAvoidingView
       style={styles.container}
       behavior="padding"
@@ -186,7 +186,7 @@ const AddItemScreen = () => {
       </View>
     </View>
     </KeyboardAvoidingView>
-    </ScrollView>
+    {/* </ScrollView> */}
     </SafeAreaView>
   );
 }

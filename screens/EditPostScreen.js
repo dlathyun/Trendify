@@ -111,7 +111,7 @@ const EditPostScreen = ({route}) => {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-        
+        <ScrollView>
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior="padding"
@@ -168,13 +168,13 @@ const EditPostScreen = ({route}) => {
       </View>
       
       <View style={styles.indivContainer}>
-        <FlatList
-            data={itemList}
-            renderItem={({item}) => 
-              <Text style={styles.addedItemText}>
-                {item.itemType + " - " + item.itemLink}
-              </Text>}
-        />
+        {itemList.map((item, index) => (
+                <View key={index}>
+                  <Text style={styles.addedItemText}>
+                      {item.itemType + " - " + item.itemLink}
+                  </Text>
+                </View>
+          ))}
       </View>
       
       <View style={styles.indivContainer}>
@@ -189,7 +189,7 @@ const EditPostScreen = ({route}) => {
       </View>
     </View>
     </KeyboardAvoidingView>
-    
+    </ScrollView>
     </SafeAreaView>
   );
   }
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   },
   safeContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#ecf0f1',
   },
   inputContainer: {
     flex: 1,

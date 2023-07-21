@@ -96,9 +96,9 @@ const OtherShopScreen = ({navigation, route}) => {
 
     return (
         <SafeAreaView style={styles.safeContainer}>
-        <ScrollView
+        {/* <ScrollView
           contentContainerStyle={styles.container}
-          showsVerticalScrollIndicator={true}>
+          showsVerticalScrollIndicator={true}> */}
           <Text style={styles.head}>
             {userData.username + "'s Shop"}
           </Text>
@@ -112,7 +112,7 @@ const OtherShopScreen = ({navigation, route}) => {
               }
             />
           </View>
-        </ScrollView>
+        {/* </ScrollView> */}
         </SafeAreaView>
       );
 }

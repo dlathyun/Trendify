@@ -31,33 +31,13 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const FeedStack = ({navigation}) => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{headerShown: false}}>
     <Stack.Screen
-      name="Home"
+      name="Main"
       component={HomeScreen}
-      options={{
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          color: '#2e64e5',
-          fontFamily: 'Kufam-SemiBoldItalic',
-          fontSize: 18,
-        },
-        headerStyle: {
-          shadowColor: '#fff',
-          elevation: 0,
-        },
-        // headerRight: () => (
-        //   <View style={{marginRight: 10}}>
-        //     <Button
-        //       name="plus"
-        //       size={22}
-        //       backgroundColor="#fff"
-        //       color="#2e64e5"
-        //       onPress={() => navigation.navigate('AddPost')}
-        //     />
-        //   </View>
-        // ),
-      }}
+      
+      
     />
     <Stack.Screen
       name="Post"
@@ -140,7 +120,14 @@ const ProfileStack = () => (
       name="ViewRequest"
       component={ViewRequestScreen}
       options={{
-        headerShown: false,
+        headerTitle: 'View Request',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
       }}
     />
     <Stack.Screen
@@ -160,6 +147,20 @@ const ProfileStack = () => (
     <Stack.Screen
       name="EditPost"
       component={EditPostScreen}
+      options={{
+        headerTitle: 'Edit Post',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="OtherShop"
+      component={OtherShopScreen}
       options={{
         headerShown: false,
       }}
@@ -277,6 +278,18 @@ const AppStack = () => {
         }}
       />
       <Tab.Screen
+        name="My Profile"
+        component={ProfileStack}
+        options={{
+          // tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <View>
+              <Ionicons name="person-outline" color={color} size={size} />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Add Post"
         component={AddPostScreen}
         options={{
@@ -290,19 +303,7 @@ const AppStack = () => {
         }}
       />
       
-      <Tab.Screen
-        name="My Profile"
-        component={ProfileStack}
-        options={{
-          // tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
-            <View>
-              <Ionicons name="person-outline" color={color} size={size} />
-            </View>
-            
-          ),
-        }}
-      />
+      
       <Tab.Screen
         name="My Shop"
         component={ShopStack}

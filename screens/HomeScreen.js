@@ -146,7 +146,7 @@ const HomeScreen = ({navigation}) => {
       </TouchableOpacity>
       <View style={styles.postFooter}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.likes}>{item.likesNum} likes</Text>
+          <Text style={styles.likes}>{item.likesNum} like(s)</Text>
           {
             likedOr
               ? (<TouchableOpacity onPress={() => onPressDislike({postID: item.postNum, userID: userUID})} style={{marginRight: 10}}>

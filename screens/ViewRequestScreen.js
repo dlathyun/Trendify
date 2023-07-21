@@ -50,7 +50,7 @@ const ViewRequestScreen = ({route, navigation}) => {
                     resizeMode='cover'
                 />
             </View>
-            <View>
+            <View style={{flex: 1,}}>
             <View style={styles.indivContainer}>
                 <Text
                     style={styles.titleText}>
@@ -81,12 +81,25 @@ const ViewRequestScreen = ({route, navigation}) => {
             <View style={styles.indivContainer}>
                 <TouchableOpacity
                     activeOpacity={0.5}
-                    style={styles.submitContainer}
+                    style={styles.addContainer}
                     onPress={()=>{navigation.navigate('EditPost', {
                         postID: item.itemPost,
                     })}}>
                     <Text style={styles.uploadText}>
-                        Click here to add this item to your post!
+                        Add this item
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.indivContainer}>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    style={styles.shopContainer}
+                    onPress={() => {
+                        navigation.navigate('OtherShop', {
+                        user: userUID
+                    })}}>
+                    <Text style={styles.uploadText}>
+                        Owner's shop page
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -153,9 +166,18 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 20,
     },
-    submitContainer: {
-        width: '53%',
-        backgroundColor: 'grey',
+    addContainer: {
+        width: '74%',
+        backgroundColor: '#b0e0e6',
+        padding: 8,
+        borderRadius: 10,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    shopContainer: {
+        width: '74%',
+        backgroundColor: '#d3d3d3',
         padding: 8,
         borderRadius: 10,
         alignSelf: 'center',
@@ -163,7 +185,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     uploadText: {
-        color: `white`,
+        color: `black`,
         fontWeight: '700',
         fontSize: 11,
         alignSelf: 'center',

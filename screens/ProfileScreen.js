@@ -115,10 +115,10 @@ const ProfileScreen = ({navigation}) => {
     
     return (
       <View style={styles.safeContainer}>
-        <ScrollView
+        {/* <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}> */}
             <Image
                 style={styles.userImage}
                 source={{uri: userData ? userData.userImgURL || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' : 'https://img.freepik.com/free-icon/user_318-150866.jpg'}}
@@ -168,7 +168,7 @@ const ProfileScreen = ({navigation}) => {
                 }
               />
       </View>
-        </ScrollView>
+        {/* </ScrollView> */}
       </View>
     );
   }
@@ -177,6 +177,7 @@ const ProfileScreen = ({navigation}) => {
     safeContainer: {
       flex: 1,
       backgroundColor: 'white',
+      alignItems: "center",
     },
     container: {
       flex: 1,

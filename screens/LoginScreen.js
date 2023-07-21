@@ -35,7 +35,14 @@ const LoginScreen = ({navigation}) => {
             const user = userCredential.user
         })
         .catch((error) => {
-            setErrorMessage(error.message)
+            // setErrorMessage(error.message)
+            // return Alert.alert(errorMessage)
+            if (error.code == 'auth/user-not-found') {
+                setErrorMessage('Create an account first!')
+                
+            } else if (error.code == 'auth/wrong-password') {
+                setErrorMessage('Wrong password!')
+            }
             return Alert.alert(errorMessage)
         })
         //setLoading(false)

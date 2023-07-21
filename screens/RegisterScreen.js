@@ -16,10 +16,10 @@ const RegisterScreen = () => {
     const [loading, setLoading] = useState('')
     const auth = getAuth()
     const handleSignUp = async () => {
-        if (name == '') {
-            setErrorMessage("Name cannot be empty!")
-            return Alert.alert(errorMessage)
-        }
+        // if (name == '') {
+        //     setErrorMessage("Name cannot be empty!")
+        //     return Alert.alert(errorMessage)
+        // }
         if (email == '') {
             setErrorMessage("Email cannot be empty!")
             return Alert.alert(errorMessage)
@@ -32,10 +32,18 @@ const RegisterScreen = () => {
         const user = await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user
+            Alert.alert("Registered!")
         })
-        //setLoading(false)
-        
-        alert("Registered!")
+        .catch((error) => {
+            // setErrorMessage(error.message)
+            // return Alert.alert(errorMessage)
+            if (error.code == 'auth/email-already-in-use') {
+                setErrorMessage('You already have an account!')
+            } else {
+                setErrorMessage(error.message)
+            }
+            return Alert.alert(errorMessage)
+        })
         
     }
 
@@ -54,12 +62,12 @@ const RegisterScreen = () => {
                 source={logo}
             />
             <View style= {styles.inputContainer}>
-                <TextInput 
+                {/* <TextInput 
                     placeholder="Name"
                     value={name}
                     onChangeText={text => setName(text)}
                     style={styles.input}
-                />
+                /> */}
                 <TextInput 
                     placeholder="Email"
                     value={email}
@@ -80,7 +88,7 @@ const RegisterScreen = () => {
                     onPress={handleSignUp}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>Register here!</Text> 
+                    <Text style={styles.buttonText}>Register</Text> 
                 </TouchableOpacity>
             </View>
             <View style={styles.emptyContainer} />
