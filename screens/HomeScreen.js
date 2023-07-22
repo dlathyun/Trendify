@@ -15,7 +15,7 @@ const HomeScreen = ({navigation}) => {
 
   const [likedOr, setLikedOr] = useState(false)
 
-  let numLikes = 0
+  //let numLikes = 0
 
     const auth = getAuth()
     const user = auth.currentUser
@@ -46,7 +46,7 @@ const HomeScreen = ({navigation}) => {
           const querySnapshot = await getDocs(q)
           const list = [];
           querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data())
+            //console.log(doc.id, " => ", doc.data())
             list.push(doc.data())
           })
         //   const list = [];
@@ -64,7 +64,7 @@ const HomeScreen = ({navigation}) => {
         //     setLoading(false);
         //   }
     
-          console.log('Posts: ', posts);
+          //console.log('Posts: ', posts);
         } catch (e) {
           console.log(e);
         }
@@ -94,11 +94,15 @@ const HomeScreen = ({navigation}) => {
       setLikedOr(true)
       const postRef = doc(db, 'wholePosts', postID.toString())
       const postSnapShot = await getDoc(postRef)
+      const itemColl = collection(db, 'wholePosts', postID.toString(), 'likes')
+      const snapshot = await getCountFromServer(itemColl);
+      const numItems = snapshot.data().count
       const ori = postSnapShot.data().likesNum
+      //console.log(numItems)
       updateDoc(postRef, {
-        likesNum: ori + 1
+        likesNum: numItems
       })
-      numLikes++
+      //numLikes++
 
       
       const itemRef = doc(db, 'posts', userID, 'likedPosts', postID.toString())
@@ -114,11 +118,14 @@ const HomeScreen = ({navigation}) => {
       setLikedOr(false)
       const postRef = doc(db, 'wholePosts', postID.toString())
       const postSnapShot = await getDoc(postRef)
+      const itemColl = collection(db, 'wholePosts', postID.toString(), 'likes')
+      const snapshot = await getCountFromServer(itemColl);
+      const numItems = snapshot.data().count
       const ori = postSnapShot.data().likesNum
       updateDoc(postRef, {
-        likesNum: ori - 1
+        likesNum: numItems
       })
-      numLikes--
+      //numLikes--
 
       const postDoc = doc(db, 'posts', userID, 'likedPosts', postID.toString())
       deleteDoc(postDoc)

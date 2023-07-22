@@ -37,11 +37,9 @@ const LikedPostScreen = ({navigation}) => {
           const list = [];
           const querySnapshot = await getDocs(itemColl)
           querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data())
+            //console.log(doc.id, " => ", doc.data())
             list.push(doc.data().postNum)
         });
-
-        console.log(list)
         const postList = []
 
         for(let i = 0; i < list.length; i++) {
@@ -52,7 +50,7 @@ const LikedPostScreen = ({navigation}) => {
 
           setPosts(postList)
 
-          console.log('Posts: ', posts);
+          //console.log('Posts: ', posts);
         } catch (e) {
           console.log(e);
         }
@@ -76,41 +74,48 @@ const LikedPostScreen = ({navigation}) => {
     // }
 
     const onPressLike = async ({postID, userID}) => {
-      const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
-      setDoc(likeRef, {
-      })
-      setLikedOr(true)
-      const postRef = doc(db, 'wholePosts', postID.toString())
-      const postSnapShot = await getDoc(postRef)
-      const ori = postSnapShot.data().likesNum
-      updateDoc(postRef, {
-        likesNum: ori + 1
-      })
-      numLikes++
-
+        const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
+        setDoc(likeRef, {
+        })
+        setLikedOr(true)
+        const postRef = doc(db, 'wholePosts', postID.toString())
+        const postSnapShot = await getDoc(postRef)
+        const itemColl = collection(db, 'wholePosts', postID.toString(), 'likes')
+        const snapshot = await getCountFromServer(itemColl);
+        const numItems = snapshot.data().count
+        const ori = postSnapShot.data().likesNum
+        updateDoc(postRef, {
+          likesNum: numItems + 1
+        })
+        //numLikes++
+  
+        
+        const itemRef = doc(db, 'posts', userID, 'likedPosts', postID.toString())
+        //console.log(caption)
+        await setDoc(itemRef, {
+          postNum: postID.toString(),
+        })
+      }
       
-      const itemRef = doc(db, 'posts', userID, 'likedPosts', postID.toString())
-      //console.log(caption)
-      await setDoc(itemRef, {
-        postNum: postID.toString(),
-      })
-    }
-    
-    const onPressDislike = async ({postID, userID}) => {
-      const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
-      deleteDoc(likeRef)
-      setLikedOr(false)
-      const postRef = doc(db, 'wholePosts', postID.toString())
-      const postSnapShot = await getDoc(postRef)
-      const ori = postSnapShot.data().likesNum
-      updateDoc(postRef, {
-        likesNum: ori - 1
-      })
-      numLikes--
-
-      const postDoc = doc(db, 'posts', userID, 'likedPosts', postID.toString())
-      deleteDoc(postDoc)
-    }
+      const onPressDislike = async ({postID, userID}) => {
+        const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
+        deleteDoc(likeRef)
+        setLikedOr(false)
+        const postRef = doc(db, 'wholePosts', postID.toString())
+        const postSnapShot = await getDoc(postRef)
+        const itemColl = collection(db, 'wholePosts', postID.toString(), 'likes')
+        const snapshot = await getCountFromServer(itemColl);
+        const numItems = snapshot.data().count
+        const ori = postSnapShot.data().likesNum
+        console.log(numItems)
+        updateDoc(postRef, {
+          likesNum: numItems - 1
+        })
+        //numLikes--
+  
+        const postDoc = doc(db, 'posts', userID, 'likedPosts', postID.toString())
+        deleteDoc(postDoc)
+      }
     
   const renderPost = ({ item }) => (
     <View style={styles.postContainer}>

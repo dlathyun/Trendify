@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: '#ecf0f1',
+    justifyContent: 'center',
   },
   head: {
     fontSize: 25,
@@ -139,10 +140,12 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   postWrapper: {
-    flexDirection: 'row',
+    //flexDirection: 'row',
     justifyContent: 'center',
     flex: 1,
     marginBottom: 10,
+    alignSelf: 'center',
+    alignContent: 'center',
   },
   postImage: {
     borderWidth: 2,
@@ -152,8 +155,8 @@ const styles = StyleSheet.create({
     width: 125,
     height: 125,
     aspectRatio: 1/1,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 17,
+    marginRight: 17,
     marginTop: 5,
   },
   postText: {
