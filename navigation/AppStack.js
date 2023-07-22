@@ -24,6 +24,7 @@ import RequestScreen from '../screens/RequestScreen';
 import { getAuth } from 'firebase/auth';
 import EditPostScreen from '../screens/EditPostScreen';
 import ViewRequestScreen from '../screens/ViewRequestScreen';
+import LikedPostScreen from '../screens/LikedPostScreen';
 const auth = getAuth()
 const user = auth.currentUser
 
@@ -57,21 +58,42 @@ const FeedStack = ({navigation}) => (
       name="OtherProfile"
       component={OtherProfileScreen}
       options={{
-        headerShown: false,
+        headerTitle: 'Profile',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
       }}
     />
     <Stack.Screen
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerShown: false,
+        headerTitle: 'Shop',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
       }}
     />
     <Stack.Screen
       name="Request"
       component={RequestScreen}
       options={{
-        headerShown: false,
+        headerTitle: 'Submit Request',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
       }}
     />
     
@@ -162,7 +184,14 @@ const ProfileStack = () => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerShown: false,
+        headerTitle: 'Shop',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
       }}
     />
     {/* <Stack.Screen
@@ -224,6 +253,74 @@ const ShopStack = ({navigation}) => (
       component={ChatScreen}
       options={{
         headerTitle: 'Chat',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const LikedPostStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Liked Post"
+      component={LikedPostScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="Post"
+      component={PostScreen}
+      options={{
+        headerTitle: 'Post',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="OtherProfile"
+      component={OtherProfileScreen}
+      options={{
+        headerTitle: 'Profile',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="OtherShop"
+      component={OtherShopScreen}
+      options={{
+        headerTitle: 'Shop',
+        headerBackTitleVisible: false,
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#fff',
+          shadowColor: '#fff',
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="Request"
+      component={RequestScreen}
+      options={{
+        headerTitle: 'Submit Request',
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {
@@ -312,6 +409,19 @@ const AppStack = () => {
           tabBarIcon: ({color, size}) => (
             <View>
               <Ionicons name="pricetag-outline" color={color} size={size} />
+            </View>
+            
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Liked Posts"
+        component={LikedPostStack}
+        options={{
+          // tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <View>
+              <Ionicons name="heart-circle-outline" color={color} size={size} />
             </View>
             
           ),

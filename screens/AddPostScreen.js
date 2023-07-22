@@ -216,7 +216,7 @@ const AddPostScreen = () => {
                 Item type:
             </Text>
             <TextInput
-            placeholder="Enter here"
+            placeholder="Enter item type"
             value={item}
             onChangeText={text => setItem(text)}
             style={styles.inputLink}
@@ -228,7 +228,7 @@ const AddPostScreen = () => {
                 Item link:
             </Text>
             <TextInput
-            placeholder="Enter here"
+            placeholder="Enter item link"
             value={link}
             onChangeText={text => setLink(text)}
             style={styles.inputLink}
@@ -239,7 +239,8 @@ const AddPostScreen = () => {
         <TouchableOpacity
           activeOpacity={0.5}
           style={styles.addContainer}
-          onPress={handleAddItem}>
+          onPress={handleAddItem}
+          testID='AddItem'>
           <Text style={styles.addText}>
             Add Item
           </Text>

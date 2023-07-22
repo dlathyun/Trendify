@@ -89,6 +89,7 @@ const LoginScreen = ({navigation}) => {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Register')}
                     style={styles.button}
+                    testID='LoginButton'
                 >
                     <Text style={styles.buttonText}>Create Account</Text> 
                 </TouchableOpacity>

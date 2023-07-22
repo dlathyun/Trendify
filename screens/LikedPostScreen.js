@@ -8,12 +8,13 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 
 
-const HomeScreen = ({navigation}) => {
+const LikedPostScreen = ({navigation}) => {
+  
   const [posts, setPosts] = useState([]);
 
   const [userData, setUserData] = useState(null);
 
-  const [likedOr, setLikedOr] = useState(false)
+  const [likedOr, setLikedOr] = useState(true)
 
   let numLikes = 0
 
@@ -28,42 +29,29 @@ const HomeScreen = ({navigation}) => {
     //   const userSnapShot = await getDoc(userDoc)
     //   setUserData(userSnapShot.data())
     // }
-    
-  
-    
 
     const fetchPosts = async () => {
-        // const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
-        // const snapshot = await getCountFromServer(itemColl);
-        // const numItems = snapshot.data().count + 1
-        //const itemRef = doc(db, 'users', user.uid, 'items') it shld be collection instead
+        const itemColl = collection(db, 'posts', user.uid, 'likedPosts')
         
         try {
-
-          // const wholePosts = query(collectionGroup(db, 'ownPosts'), where('user', '!=', user?.uid.toString()));
-          // const querySnapshot = await getDocs(wholePosts);
-          const q = query(collection(db, "wholePosts"), where("user", "!=", user?.uid.toString()));
-          const querySnapshot = await getDocs(q)
           const list = [];
+          const querySnapshot = await getDocs(itemColl)
           querySnapshot.forEach((doc) => {
             console.log(doc.id, " => ", doc.data())
-            list.push(doc.data())
-          })
-        //   const list = [];
-        //   const querySnapshot = await getDocs(itemColl)
-        //   querySnapshot.forEach((doc) => {
-        //     console.log(doc.id, " => ", doc.data())
-        //     list.push(doc.data())
-        // });
+            list.push(doc.data().postNum)
+        });
 
-        
-          //need to get post from firebase
-          setPosts(list);
-    
-        //   if (loading) {
-        //     setLoading(false);
-        //   }
-    
+        console.log(list)
+        const postList = []
+
+        for(let i = 0; i < list.length; i++) {
+            let postRef = list[i]
+            let postSnap = await getDoc(doc(db, 'wholePosts', postRef));
+            postList.push(postSnap.data())
+        }
+
+          setPosts(postList)
+
           console.log('Posts: ', posts);
         } catch (e) {
           console.log(e);
@@ -237,4 +225,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default LikedPostScreen;
