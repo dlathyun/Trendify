@@ -33,12 +33,14 @@ const Tab = createBottomTabNavigator();
 
 const FeedStack = ({navigation}) => (
   <Stack.Navigator
-    screenOptions={{headerShown: false}}>
+    //screenOptions={{headerShown: false}}
+    >
     <Stack.Screen
       name="Main"
       component={HomeScreen}
-      
-      
+      options={{
+        headerShown: false,
+      }}
     />
     <Stack.Screen
       name="Post"
@@ -97,7 +99,7 @@ const FeedStack = ({navigation}) => (
       }}
     />
     
-    {/* <Stack.Screen
+    <Stack.Screen
       name="Chat"
       component={ChatScreen}
       options={{
@@ -110,7 +112,7 @@ const FeedStack = ({navigation}) => (
           elevation: 0,
         },
       }}
-    /> */}
+    />
   </Stack.Navigator>
 );
 
@@ -342,8 +344,8 @@ const AppStack = () => {
 
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: '#20b2aa',
+      screenOptions={{
+        tabBarActiveTintColor: '#20b2aa',
       }}>
       {/* <Tab.Screen
         name="Home"
