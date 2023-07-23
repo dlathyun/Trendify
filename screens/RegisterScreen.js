@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, View,  TouchableOpacity, SafeAreaView, Image, Platform, Alert } from 'react-native';
 //import { Auth } from 'firebase/auth';
 //import auth from "@app/firebaseConfig"
@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native';
 
 const logo = require('../assets/logo.png')
-const RegisterScreen = () => {
+const RegisterScreen = ({handleSignUpFunc}) => {
     const [email, setEmail] = useState('')
     const [password, setPassWord] = useState('')
     const [name, setName] = useState('')
@@ -22,11 +22,11 @@ const RegisterScreen = () => {
         // }
         if (email == '') {
             setErrorMessage("Email cannot be empty!")
-            return Alert.alert(errorMessage)
+            return Alert.alert("Email cannot be empty!");
         }
         if (password == '') {
             setErrorMessage("Password cannot be empty!")
-            return Alert.alert(errorMessage)
+            return Alert.alert("Password cannot be empty!")
         }
         //setLoading(true)
         const user = await createUserWithEmailAndPassword(auth, email, password)
@@ -37,12 +37,14 @@ const RegisterScreen = () => {
         .catch((error) => {
             // setErrorMessage(error.message)
             // return Alert.alert(errorMessage)
+            let errorMessageTemp;
             if (error.code == 'auth/email-already-in-use') {
-                setErrorMessage('You already have an account!')
+                errorMessageTemp ='You already have an account!';
             } else {
-                setErrorMessage(error.message)
+                errorMessageTemp = error.message;
             }
-            return Alert.alert(errorMessage)
+            setErrorMessage(errorMessageTemp);
+            return Alert.alert(errorMessageTemp)
         })
         
     }
@@ -69,12 +71,14 @@ const RegisterScreen = () => {
                     style={styles.input}
                 /> */}
                 <TextInput 
+                    testID="emailInput"
                     placeholder="Email"
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
                 />
                 <TextInput 
+                    testID="passwordInput"
                     placeholder="Password"
                     value={password}
                     onChangeText={text => setPassWord(text)}
@@ -85,6 +89,7 @@ const RegisterScreen = () => {
             </KeyboardAvoidingView>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
+                    testID="handleSignUpButton"
                     onPress={handleSignUp}
                     style={styles.button}
                 >

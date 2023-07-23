@@ -364,6 +364,7 @@ const AppStack = () => {
       /> */}
 
     <Tab.Screen
+        testID="homeScreen"
         name="Home"
         component={FeedStack}
         options={{

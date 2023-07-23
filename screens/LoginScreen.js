@@ -23,27 +23,30 @@ const LoginScreen = ({navigation}) => {
     const handleSignIn = async () => {
         if (email == '') {
             setErrorMessage("Email cannot be empty!")
-            return Alert.alert(errorMessage)
+            return Alert.alert("Email cannot be empty!")
         }
         if (password == '') {
             setErrorMessage("Password cannot be empty!")
-            return Alert.alert(errorMessage)
+            return Alert.alert("Password cannot be empty!")
         }
         //setLoading(true)
         const user = await signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+            console.log("LOGGED");
             const user = userCredential.user
         })
         .catch((error) => {
             // setErrorMessage(error.message)
             // return Alert.alert(errorMessage)
+            let errorMessageTemp;
             if (error.code == 'auth/user-not-found') {
-                setErrorMessage('Create an account first!')
+                errorMessageTemp = 'Create an account first!'
                 
             } else if (error.code == 'auth/wrong-password') {
-                setErrorMessage('Wrong password!')
+                errorMessageTemp = 'Wrong password!';
             }
-            return Alert.alert(errorMessage)
+            setErrorMessage(errorMessageTemp)
+            return Alert.alert(errorMessageTemp)
         })
         //setLoading(false)
     }
@@ -64,12 +67,14 @@ const LoginScreen = ({navigation}) => {
             />
             <View style= {styles.inputContainer}>
                 <TextInput 
+                    testID="emailInput"
                     placeholder="Email"
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
                 />
-                <TextInput 
+                <TextInput
+                    testID="passwordInput"
                     placeholder="Password"
                     value={password}
                     onChangeText={text => setPassWord(text)}
@@ -81,6 +86,7 @@ const LoginScreen = ({navigation}) => {
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
+                    testID="handleSignInButton"
                     onPress={handleSignIn}
                     style={styles.button}
                 >

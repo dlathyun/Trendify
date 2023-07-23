@@ -20,6 +20,7 @@ const AuthStack = () => {
         options={{header: () => null}}
       />
       <Stack.Screen
+        id="registerScreen"
         name="Register"
         component={RegisterScreen}
         options={({navigation}) => ({
@@ -32,6 +33,7 @@ const AuthStack = () => {
           headerLeft: () => (
             <View style={{marginLeft: 10}}>
               <Button 
+                id="loginButton"
                 title="Back"
                 color="#20b2aa"
                 onPress={() => navigation.navigate('Login')}
