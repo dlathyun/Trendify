@@ -96,7 +96,7 @@ const ViewRequestScreen = ({route, navigation}) => {
                     style={styles.shopContainer}
                     onPress={() => {
                         navigation.navigate('OtherShop', {
-                        user: userUID
+                        user: item.itemOwner
                     })}}>
                     <Text style={styles.uploadText}>
                         Owner's shop page

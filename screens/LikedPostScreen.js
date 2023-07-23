@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, VirtualizedList } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, query, where, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
@@ -166,6 +166,15 @@ const LikedPostScreen = ({navigation}) => {
     </View>
   );
 
+  const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+      setRefreshing(true);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 1285);
+    }, []);
+
 
 
   return (
@@ -175,6 +184,9 @@ const LikedPostScreen = ({navigation}) => {
         renderItem={renderPost}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

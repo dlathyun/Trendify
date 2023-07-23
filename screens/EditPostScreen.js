@@ -13,7 +13,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 
 
 let itemList =[]
-const EditPostScreen = ({route}) => {
+const EditPostScreen = ({route, navigation}) => {
   const [caption, setCaption] = useState('')
   const [userData, setUserData] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
@@ -96,6 +96,7 @@ const EditPostScreen = ({route}) => {
       itemList.length = 0
       
       Alert.alert("Post uploaded!")
+      navigation.goBack()
   }
   
   const [item, setItem] = useState('')

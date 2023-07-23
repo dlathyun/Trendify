@@ -1,8 +1,12 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { Constants } from "expo-constants"
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getAuth } from "firebase/auth";
 
 const ItemScreen = ({route, navigation}) => {
+    const auth = getAuth()
+    const curUser = auth.currentUser
+    const curUserID = curUser?.uid
     const { title, description, price, additionalNote, img, user } = route.params;
     return (
         <SafeAreaView style={styles.safeContainer}>

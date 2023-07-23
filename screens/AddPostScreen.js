@@ -11,21 +11,9 @@ import SearchableDropdown from 'react-native-searchable-dropdown'
 import { useEffect } from 'react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
-const itemOptions = [
-    // name key is must. It is to show the text in front
-    {id: 1, name: 'Shirt'},
-    {id: 2, name: 'Pants'},
-    {id: 3, name: 'Skirts'},
-    {id: 4, name: 'Shoes'},
-    {id: 5, name: 'Accessories'},
-    {id: 6, name: 'Hat/Cap'},
-    {id: 7, name: 'Socks'},
-    {id: 8, name: 'Mask'},
-    {id: 9, name: 'Bag'},
-    {id: 10, name: 'Jacket'},
-];
+
 const itemList =[]
-const AddPostScreen = () => {
+const AddPostScreen = ({navigation}) => {
   const [caption, setCaption] = useState('')
   const [imageURI, setImageURI] = useState('')
   const [userData, setUserData] = useState('')
@@ -57,10 +45,13 @@ const AddPostScreen = () => {
       //   imgUrl = userData.;
       // }
       
-      const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
-      const snapshot = await getCountFromServer(itemColl);
-      const numItems = snapshot.data().count + 1
-      const itemRef = doc(db, 'posts', user.uid, 'ownPosts', numItems.toString())
+      // const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
+      // const snapshot = await getCountFromServer(itemColl);
+      // const numItems = snapshot.data().count + 1
+      const postColl = collection(db, 'wholePosts')
+      const postSnapShot = await getCountFromServer(postColl)
+      const numPosts = postSnapShot.data().count + 1
+      const itemRef = doc(db, 'posts', user.uid, 'ownPosts', numPosts.toString())
       //console.log(caption)
       await setDoc(itemRef, {
         postCaption: caption,
@@ -75,9 +66,7 @@ const AddPostScreen = () => {
       })
 
       
-      const postColl = collection(db, 'wholePosts')
-      const postSnapShot = await getCountFromServer(postColl)
-      const numPosts = snapshot.data().count + 1
+      
       const postRef = doc(db, 'wholePosts', numPosts.toString())
       await setDoc(postRef, {
         postCaption: caption,
@@ -105,6 +94,7 @@ const AddPostScreen = () => {
       itemList.length = 0
       
       Alert.alert("Post uploaded!")
+      navigation.goBack()
   }
   const uploadImage = async (uri, name, onProgress) => {
     const metadata = {
@@ -117,7 +107,7 @@ const AddPostScreen = () => {
     //const file = getBlobFroUri(imageURI)
     const fetchResponse = await fetch(uri)
     const theBlob = await fetchResponse.blob()
-    const imageRef = ref(storage, `postImg/${user.uid}`)
+    const imageRef = ref(storage, `postImg/${uri}`)
     const uploadTask = uploadBytesResumable(imageRef, theBlob, metadata);
 
     setUploading(true);

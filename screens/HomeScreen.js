@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, VirtualizedList } from 'react-native';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, query, where, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useCallback } from 'react';
 
 
 
@@ -14,6 +15,8 @@ const HomeScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
 
   const [likedOr, setLikedOr] = useState(false)
+
+  const [likedList, setLikedList] = useState([])
 
   //let numLikes = 0
 
@@ -33,11 +36,6 @@ const HomeScreen = ({navigation}) => {
     
 
     const fetchPosts = async () => {
-        // const itemColl = collection(db, 'posts', user.uid, 'ownPosts')
-        // const snapshot = await getCountFromServer(itemColl);
-        // const numItems = snapshot.data().count + 1
-        //const itemRef = doc(db, 'users', user.uid, 'items') it shld be collection instead
-        
         try {
 
           // const wholePosts = query(collectionGroup(db, 'ownPosts'), where('user', '!=', user?.uid.toString()));
@@ -49,22 +47,16 @@ const HomeScreen = ({navigation}) => {
             //console.log(doc.id, " => ", doc.data())
             list.push(doc.data())
           })
-        //   const list = [];
-        //   const querySnapshot = await getDocs(itemColl)
-        //   querySnapshot.forEach((doc) => {
-        //     console.log(doc.id, " => ", doc.data())
-        //     list.push(doc.data())
-        // });
 
-        
-          //need to get post from firebase
           setPosts(list);
     
-        //   if (loading) {
-        //     setLoading(false);
-        //   }
-    
-          //console.log('Posts: ', posts);
+          const likedColl = collection(db, 'posts', userUID, 'likedPosts')
+          const likedSnapShot = await getDocs(likedColl)
+          const lList = []
+          likedSnapShot.forEach((doc) => {
+            lList.push(doc.data().postNum)
+          })
+
         } catch (e) {
           console.log(e);
         }
@@ -100,7 +92,8 @@ const HomeScreen = ({navigation}) => {
       const ori = postSnapShot.data().likesNum
       //console.log(numItems)
       updateDoc(postRef, {
-        likesNum: numItems
+        likesNum: numItems,
+        liked: true
       })
       //numLikes++
 
@@ -110,6 +103,8 @@ const HomeScreen = ({navigation}) => {
       await setDoc(itemRef, {
         postNum: postID.toString(),
       })
+      likedList.push(postID.toString())
+      fetchPosts()
     }
     
     const onPressDislike = async ({postID, userID}) => {
@@ -123,12 +118,26 @@ const HomeScreen = ({navigation}) => {
       const numItems = snapshot.data().count
       const ori = postSnapShot.data().likesNum
       updateDoc(postRef, {
-        likesNum: numItems
+        likesNum: numItems,
+        liked: false
       })
       //numLikes--
 
       const postDoc = doc(db, 'posts', userID, 'likedPosts', postID.toString())
       deleteDoc(postDoc)
+      fetchPosts()
+
+      let likedListV2 = likedList.filter(x => x != postID.toString())
+      setLikedList(likedListV2)
+    }
+
+    const checkLiked = ({postID}) => {
+      console.log(likedList)
+      if (likedList.includes(postID.toString())) {
+        return true
+      } else {
+        return false
+      }
     }
     
   const renderPost = ({ item }) => (
@@ -165,7 +174,7 @@ const HomeScreen = ({navigation}) => {
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.likes}>{item.likesNum} like(s)</Text>
           {
-            likedOr
+            checkLiked({postID: item.postNum})
               ? (<TouchableOpacity onPress={() => onPressDislike({postID: item.postNum, userID: userUID})} style={{marginRight: 10}}>
                   <Ionicons name="heart" color={'red'} size={30} />
                 </TouchableOpacity>)
@@ -180,6 +189,15 @@ const HomeScreen = ({navigation}) => {
     </View>
   );
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1285);
+  }, []);
+
 
 
   return (
@@ -189,6 +207,9 @@ const HomeScreen = ({navigation}) => {
         renderItem={renderPost}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

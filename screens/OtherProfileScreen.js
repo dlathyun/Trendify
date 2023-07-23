@@ -104,10 +104,11 @@ const OtherProfileScreen = ({navigation, route}) => {
     
     return (
       <View style={styles.safeContainer}>
-        <ScrollView
+        <View style={styles.contentContainer}>
+        {/* <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}> */}
             <Image
                 style={styles.userImage}
                 source={{uri: userData ? userData.userImgURL || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png' : 'https://img.freepik.com/free-icon/user_318-150866.jpg'}}
@@ -147,7 +148,8 @@ const OtherProfileScreen = ({navigation, route}) => {
                 }
               />
       </View>
-        </ScrollView>
+      </View>
+        {/* </ScrollView> */}
       </View>
     );
   }

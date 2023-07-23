@@ -8,11 +8,14 @@ import RegisterScreen from './RegisterScreen';
 import { Alert } from 'react-native';
 import {Dimensions} from 'react-native';
 
-const logo = require('../assets/logo.png')
+import { Asset } from 'expo-asset';
+
+
 
 
 
 const LoginScreen = ({navigation}) => {
+    const logo = require('../assets/logo1.jpg')
     const [email, setEmail] = useState('')
     const [password, setPassWord] = useState('')
     const [errorMessage, setErrorMessage] = useState('')

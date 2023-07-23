@@ -10,7 +10,7 @@ import { Alert } from 'react-native';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
-const RequestScreen = ({route}) => {
+const RequestScreen = ({route, navigation}) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
@@ -101,7 +101,7 @@ const RequestScreen = ({route}) => {
       setImgURI('')
 
       Alert.alert("Item successfully requested!")
-
+      navigation.goBack()
   }
 
 

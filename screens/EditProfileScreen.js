@@ -19,7 +19,7 @@ import { Alert } from 'react-native';
 
 
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({navigation}) => {
   //const {user, logout} = useContext(AuthContext);
   const [imageURI, setImageURI] = useState(null);
   const [imageURL, setImageURL] = useState('')
@@ -40,11 +40,14 @@ const EditProfileScreen = () => {
       //     console.log('User Data', documentSnapshot.data());
       //     setUserData(documentSnapshot.data());
       //   }
-      const userRef = doc(db, 'users', user.uid)
+      const userRef = doc(db, 'users', user.uid.toString())
       const documentSnapshot = await getDoc(userRef)
         if (documentSnapshot.exists()) {
           console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
+          setName(documentSnapshot.data().username)
+          setAbout(documentSnapshot.data().aboutUser)
+          setImageURI(documentSnapshot.data().userImgURL)
         } else {
           console.log("No such user!")
         }
@@ -74,25 +77,26 @@ const EditProfileScreen = () => {
         setImageURI(null)
 
         Alert.alert("Updated Profile!")
+        navigation.goBack()
          })
     }
 
-    const getBlobFroUri = async (uri) => {
-      const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          resolve(xhr.response);
-        };
-        xhr.onerror = function (e) {
-          reject(new TypeError("Network request failed"));
-        };
-        xhr.responseType = "blob";
-        xhr.open("GET", uri, true);
-        xhr.send(null);
-      });
+    // const getBlobFroUri = async (uri) => {
+    //   const blob = await new Promise((resolve, reject) => {
+    //     const xhr = new XMLHttpRequest();
+    //     xhr.onload = function () {
+    //       resolve(xhr.response);
+    //     };
+    //     xhr.onerror = function (e) {
+    //       reject(new TypeError("Network request failed"));
+    //     };
+    //     xhr.responseType = "blob";
+    //     xhr.open("GET", uri, true);
+    //     xhr.send(null);
+    //   });
     
-      return blob;
-    };
+    //   return blob;
+    // };
 
     const uploadImage = async (uri, name, onProgress) => {
       const metadata = {
@@ -105,7 +109,8 @@ const EditProfileScreen = () => {
       //const file = getBlobFroUri(imageURI)
       const fetchResponse = await fetch(uri)
       const theBlob = await fetchResponse.blob()
-      const imageRef = ref(storage, 'userImg/${user.uid}')
+      const filename = uri.substring(uri.lastIndexOf('/') + 1)
+      const imageRef = ref(storage, `userImg/${filename}`)
       const uploadTask = uploadBytesResumable(imageRef, theBlob, metadata);
 
       setUploading(true);
@@ -280,7 +285,7 @@ const EditProfileScreen = () => {
           Username
         </Text>
         <TextInput
-          placeholder="Enter here"
+          placeholder={name}
           value={name}
           onChangeText={text => setName(text)}
           style={styles.inputText}
@@ -291,7 +296,7 @@ const EditProfileScreen = () => {
           About
         </Text>
         <TextInput
-          placeholder="Enter here"
+          placeholder={about}
           value={about}
           onChangeText={text => setAbout(text)}
           style={styles.inputText}

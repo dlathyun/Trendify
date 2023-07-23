@@ -7,8 +7,9 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 import { ScrollView } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native';
 
-const logo = require('../assets/logo.png')
+//const logo = require('../assets\logo1.jpg')
 const RegisterScreen = () => {
+    const logo = require('../assets/logo1.jpg')
     const [email, setEmail] = useState('')
     const [password, setPassWord] = useState('')
     const [name, setName] = useState('')
@@ -26,6 +27,10 @@ const RegisterScreen = () => {
         }
         if (password == '') {
             setErrorMessage("Password cannot be empty!")
+            return Alert.alert(errorMessage)
+        }
+        if (password.length < 8) {
+            setErrorMessage("Password is too short!")
             return Alert.alert(errorMessage)
         }
         //setLoading(true)
@@ -75,7 +80,7 @@ const RegisterScreen = () => {
                     style={styles.input}
                 />
                 <TextInput 
-                    placeholder="Password"
+                    placeholder="Password (at least 8 characters long)"
                     value={password}
                     onChangeText={text => setPassWord(text)}
                     style={styles.input}

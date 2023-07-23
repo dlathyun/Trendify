@@ -60,7 +60,7 @@ const FeedStack = ({navigation}) => (
       name="OtherProfile"
       component={OtherProfileScreen}
       options={{
-        headerTitle: 'Profile',
+        headerTitle: '',
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {
@@ -74,7 +74,7 @@ const FeedStack = ({navigation}) => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerTitle: 'Shop',
+        headerTitle: '',
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {
@@ -186,7 +186,7 @@ const ProfileStack = () => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerTitle: 'Shop',
+        headerTitle: '',
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {
@@ -294,7 +294,7 @@ const LikedPostStack = ({navigation}) => (
       name="OtherProfile"
       component={OtherProfileScreen}
       options={{
-        headerTitle: 'Profile',
+        headerTitle: '',
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {
@@ -308,7 +308,7 @@ const LikedPostStack = ({navigation}) => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerTitle: 'Shop',
+        headerTitle: '',
         headerBackTitleVisible: false,
         headerTitleAlign: 'center',
         headerStyle: {

@@ -10,7 +10,7 @@ import { Alert } from 'react-native';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
-const AddItemScreen = () => {
+const AddItemScreen = ({navigation}) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
@@ -51,7 +51,7 @@ const AddItemScreen = () => {
       setImg('')
 
       Alert.alert("Item successfully added!")
-
+      navigation.goBack()
   }
   const uploadImage = async (uri, name, onProgress) => {
     const metadata = {
@@ -64,7 +64,7 @@ const AddItemScreen = () => {
     //const file = getBlobFroUri(imageURI)
     const fetchResponse = await fetch(uri)
     const theBlob = await fetchResponse.blob()
-    const imageRef = ref(storage, `itemImg/${user.uid}`)
+    const imageRef = ref(storage, `itemImg/${uri}`)
     const uploadTask = uploadBytesResumable(imageRef, theBlob, metadata);
 
     setUploading(true);

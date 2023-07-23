@@ -96,11 +96,9 @@ const OtherShopScreen = ({navigation, route}) => {
 
     return (
         <SafeAreaView style={styles.safeContainer}>
-        {/* <ScrollView
-          contentContainerStyle={styles.container}
-          showsVerticalScrollIndicator={true}> */}
+          <View style={styles.container}>
           <Text style={styles.head}>
-            {userData.username + "'s Shop"}
+            {"[ " + userData.username + "'s Shop" + " ]"}
           </Text>
           <View style={styles.postWrapper}>
             <FlatList
@@ -112,7 +110,7 @@ const OtherShopScreen = ({navigation, route}) => {
               }
             />
           </View>
-        {/* </ScrollView> */}
+          </View>
         </SafeAreaView>
       );
 }
@@ -127,14 +125,15 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: '#ecf0f1',
+    backgroundColor: 'white',
   },
   head: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 10,
-    textAlign: 'center'
+    //marginTop: 10,
+    marginBottom: 35,
+    textAlign: 'center',
+    backgroundColor: '#e0ffff'
   },
   postWrapper: {
     flexDirection: 'row',

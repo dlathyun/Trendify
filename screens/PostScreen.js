@@ -32,9 +32,12 @@ const PostScreen = ({navigation, route}) => {
             
         } else {
             const postDoc = doc(db, 'posts', user.toString(), 'ownPosts', postNum.toString())
+            const postOtherDoc = doc(db, 'wholePosts', postNum.toString())
             deleteDoc(postDoc)
+            deleteDoc(postOtherDoc)
             Alert.alert("Post successfully deleted!")
         }
+        navigation.goBack()
         return null
     }
 

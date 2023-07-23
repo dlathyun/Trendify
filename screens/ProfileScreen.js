@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext, use} from 'react';
 import { Text, View, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList, Alert } from 'react-native';
 import Constants from 'expo-constants';
 //import { AuthContext } from "@navigation/AuthProvider";
 import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { RefreshControl } from 'react-native';
 
 
 
@@ -166,6 +167,9 @@ const ProfileScreen = ({navigation}) => {
                 renderItem={
                   renderPost
                 }
+                // refreshControl={
+                //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                // }
               />
       </View>
         {/* </ScrollView> */}
@@ -205,7 +209,7 @@ const ProfileScreen = ({navigation}) => {
     aboutUser: {
       fontSize: 12,
       fontWeight: '600',
-      colour: 'black',
+      //colour: 'black',
       textAlign: 'center',
       marginBottom: 10,
     },
