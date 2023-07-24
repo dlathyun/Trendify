@@ -20,7 +20,8 @@ const ShopScreen = ({navigation}) => {
         price: item.itemPrice,
         additionalNote: item.itemAdditionalNote,
         img: item.itemImg,
-        user: user.uid
+        itemOwner: item.itemOwner,
+        itemNum: item.itemNum
       })}
     }>
       <Image 

@@ -60,7 +60,7 @@ const AddPostScreen = ({navigation}) => {
         itemList: itemList,
         username: userData.username,
         userImgURL: userData.userImgURL,
-        postNum: numItems,
+        postNum: numPosts,
         likesNum: 0,
         liked: false,
       })
@@ -75,19 +75,16 @@ const AddPostScreen = ({navigation}) => {
         itemList: itemList,
         username: userData.username,
         userImgURL: userData.userImgURL,
-        postNum: numItems,
+        postNum: numPosts,
         likesNum: 0,
         liked: false,
       })
 
       if (caption == '') {
-        setErrorMessage("Email cannot be empty!")
+        setErrorMessage("Caption cannot be empty!")
         return Alert.alert(errorMessage)
       }
-      if (itemList.length == 0) {
-          setErrorMessage("Password cannot be empty!")
-          return Alert.alert(errorMessage)
-      } 
+      
 
       setCaption('')
       setImageURI('')

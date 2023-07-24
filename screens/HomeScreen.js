@@ -104,7 +104,7 @@ const HomeScreen = ({navigation}) => {
         postNum: postID.toString(),
       })
       likedList.push(postID.toString())
-      fetchPosts()
+      await fetchPosts()
     }
     
     const onPressDislike = async ({postID, userID}) => {
@@ -125,7 +125,7 @@ const HomeScreen = ({navigation}) => {
 
       const postDoc = doc(db, 'posts', userID, 'likedPosts', postID.toString())
       deleteDoc(postDoc)
-      fetchPosts()
+      await fetchPosts()
 
       let likedListV2 = likedList.filter(x => x != postID.toString())
       setLikedList(likedListV2)
@@ -139,6 +139,8 @@ const HomeScreen = ({navigation}) => {
         return false
       }
     }
+
+    
     
   const renderPost = ({ item }) => (
     <View style={styles.postContainer}>
@@ -226,7 +228,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 40,
+    paddingTop: 10,
   },
   postContainer: {
     marginBottom: 20,

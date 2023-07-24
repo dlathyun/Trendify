@@ -41,7 +41,9 @@ const AddItemScreen = ({navigation}) => {
         itemDescription: description,
         itemPrice: price,
         itemAdditionalNote: additionalNote,
-        itemImg: imgUrl
+        itemImg: imgUrl,
+        itemNum: numItems.toString(),
+        itemOwner: user?.uid.toString()
       })
 
       setTitle('')

@@ -2,12 +2,38 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
 import { Constants } from "expo-constants"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAuth } from "firebase/auth";
+import { Alert } from "react-native";
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const ItemScreen = ({route, navigation}) => {
     const auth = getAuth()
     const curUser = auth.currentUser
     const curUserID = curUser?.uid
-    const { title, description, price, additionalNote, img, user } = route.params;
+    const { title, description, price, additionalNote, img, itemOwner, itemNum } = route.params;
+    
+    const deleteItem = () => {
+        if (curUserID.toString() != itemOwner.toString()) {
+            Alert.alert("You don't have permission to delete this post!")
+            
+        } else {
+            const itemDoc = doc(db, 'users', itemOwner.toString(), 'items', itemNum.toString())
+            
+            deleteDoc(itemDoc)
+            Alert.alert("Item successfully deleted!")
+        }
+        navigation.goBack()
+        return null
+    }
+
+    const handleChat = () => {
+        if (curUserID.toString() == itemOwner.toString()) {
+            Alert.alert("Are you planning to chat with yourself?")
+            
+        } else {
+            navigation.navigate('Chat')
+        }
+    }
     return (
         <SafeAreaView style={styles.safeContainer}>
             <View style={styles.indivContainer}>
@@ -48,9 +74,19 @@ const ItemScreen = ({route, navigation}) => {
                 <TouchableOpacity
                     activeOpacity={0.5}
                     style={styles.submitContainer}
-                    onPress={()=>{navigation.navigate('Chat')}}>
-                    <Text style={styles.uploadText}>
+                    onPress={handleChat}>
+                    <Text style={styles.chatText}>
                         Chat & Buy!
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.indivContainer}>
+                <TouchableOpacity
+                    activeOpacity={0.5}
+                    style={styles.deleteContainer}
+                    onPress={deleteItem}>
+                    <Text style={styles.uploadText}>
+                        Delete
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -102,7 +138,17 @@ const styles = StyleSheet.create({
     },
     submitContainer: {
         width: '35%',
-        backgroundColor: 'grey',
+        backgroundColor: '#b0e0e6',
+        padding: 8,
+        marginTop: 5,
+        borderRadius: 10,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    deleteContainer: {
+        width: '35%',
+        backgroundColor: 'red',
         padding: 8,
         marginTop: 5,
         borderRadius: 10,
@@ -112,6 +158,11 @@ const styles = StyleSheet.create({
     },
     uploadText: {
         color: `white`,
+        fontWeight: '700',
+        fontSize: 16,
+    },
+    chatText: {
+        color: `black`,
         fontWeight: '700',
         fontSize: 16,
     },
