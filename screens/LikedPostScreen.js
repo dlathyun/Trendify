@@ -1,166 +1,159 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
-import { Firestore, doc, getDoc, setDoc, collection, getDocs, getCountFromServer, query, where, deleteDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
-import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  getCountFromServer,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import { getAuth } from "firebase/auth";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-
-
-
-const LikedPostScreen = ({navigation}) => {
-  
+const LikedPostScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
-  const [userData, setUserData] = useState(null);
+  const [likedOr, setLikedOr] = useState(true);
 
-  const [likedOr, setLikedOr] = useState(true)
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userUID = user?.uid.toString();
+  const [loading, setLoading] = useState(true);
 
-  let numLikes = 0
+  const fetchPosts = async () => {
+    const itemColl = collection(db, "posts", user.uid, "likedPosts");
 
-    const auth = getAuth()
-    const user = auth.currentUser
-    const userUID = user?.uid.toString()
-    const [loading, setLoading] = useState(true);
-    
+    try {
+      const list = [];
+      const querySnapshot = await getDocs(itemColl);
+      querySnapshot.forEach((doc) => {
+        list.push(doc.data().postNum);
+      });
+      const postList = [];
 
-    // const getUser = async() => {
-    //   const userDoc = doc(db, 'users', user.uid)
-    //   const userSnapShot = await getDoc(userDoc)
-    //   setUserData(userSnapShot.data())
-    // }
-
-    const fetchPosts = async () => {
-        const itemColl = collection(db, 'posts', user.uid, 'likedPosts')
-        
-        try {
-          const list = [];
-          const querySnapshot = await getDocs(itemColl)
-          querySnapshot.forEach((doc) => {
-            //console.log(doc.id, " => ", doc.data())
-            list.push(doc.data().postNum)
-        });
-        const postList = []
-
-        for(let i = 0; i < list.length; i++) {
-            let postRef = list[i]
-            let postSnap = await getDoc(doc(db, 'wholePosts', postRef));
-            postList.push(postSnap.data())
-        }
-
-          setPosts(postList)
-
-          //console.log('Posts: ', posts);
-        } catch (e) {
-          console.log(e);
-        }
-    };
-
-    useEffect(() => {
-        //getUser();
-        fetchPosts();
-        navigation.addListener("focus", () => setLoading(!loading));
-      }, [navigation, loading]);
-  
-    // const checkLiked = async({postID, userID}) => {
-    //   const querySnapshot = await getDocs(collection(db, 'wholePosts', postID.toString(), 'likes'));
-    //   querySnapshot.forEach((doc) => {
-    //     // doc.data() is never undefined for query doc snapshots
-    //     if (doc.id.toString() == userID) {
-    //       return true
-    //     }
-    //   });
-    //   return false
-    // }
-
-    const onPressLike = async ({postID, userID}) => {
-        const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
-        setDoc(likeRef, {
-        })
-        setLikedOr(true)
-        const postRef = doc(db, 'wholePosts', postID.toString())
-        const postSnapShot = await getDoc(postRef)
-        const itemColl = collection(db, 'wholePosts', postID.toString(), 'likes')
-        const snapshot = await getCountFromServer(itemColl);
-        const numItems = snapshot.data().count
-        const ori = postSnapShot.data().likesNum
-        updateDoc(postRef, {
-          likesNum: numItems + 1
-        })
-        //numLikes++
-  
-        
-        const itemRef = doc(db, 'posts', userID, 'likedPosts', postID.toString())
-        //console.log(caption)
-        await setDoc(itemRef, {
-          postNum: postID.toString(),
-        })
+      for (let i = 0; i < list.length; i++) {
+        let postRef = list[i];
+        let postSnap = await getDoc(doc(db, "wholePosts", postRef));
+        postList.push(postSnap.data());
       }
-      
-      const onPressDislike = async ({postID, userID}) => {
-        const likeRef = doc(db, 'wholePosts', postID.toString(), 'likes', userID)
-        deleteDoc(likeRef)
-        setLikedOr(false)
-        const postRef = doc(db, 'wholePosts', postID.toString())
-        const postSnapShot = await getDoc(postRef)
-        const itemColl = collection(db, 'wholePosts', postID.toString(), 'likes')
-        const snapshot = await getCountFromServer(itemColl);
-        const numItems = snapshot.data().count
-        const ori = postSnapShot.data().likesNum
-        console.log(numItems)
-        updateDoc(postRef, {
-          likesNum: numItems - 1
-        })
-        //numLikes--
-  
-        const postDoc = doc(db, 'posts', userID, 'likedPosts', postID.toString())
-        deleteDoc(postDoc)
-      }
-    
+
+      setPosts(postList);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+    navigation.addListener("focus", () => setLoading(!loading));
+  }, [navigation, loading]);
+
+
+  const onPressLike = async ({ postID, userID }) => {
+    const likeRef = doc(db, "wholePosts", postID.toString(), "likes", userID);
+    setDoc(likeRef, {});
+    setLikedOr(true);
+    const postRef = doc(db, "wholePosts", postID.toString());
+    const postSnapShot = await getDoc(postRef);
+    const itemColl = collection(db, "wholePosts", postID.toString(), "likes");
+    const snapshot = await getCountFromServer(itemColl);
+    const numItems = snapshot.data().count;
+    const ori = postSnapShot.data().likesNum;
+    updateDoc(postRef, {
+      likesNum: numItems + 1,
+    });
+    const itemRef = doc(db, "posts", userID, "likedPosts", postID.toString());
+    await setDoc(itemRef, {
+      postNum: postID.toString(),
+    });
+  };
+
+  const onPressDislike = async ({ postID, userID }) => {
+    const likeRef = doc(db, "wholePosts", postID.toString(), "likes", userID);
+    deleteDoc(likeRef);
+    setLikedOr(false);
+    const postRef = doc(db, "wholePosts", postID.toString());
+    const postSnapShot = await getDoc(postRef);
+    const itemColl = collection(db, "wholePosts", postID.toString(), "likes");
+    const snapshot = await getCountFromServer(itemColl);
+    const numItems = snapshot.data().count;
+    const ori = postSnapShot.data().likesNum;
+    console.log(numItems);
+    updateDoc(postRef, {
+      likesNum: numItems - 1,
+    });
+
+    const postDoc = doc(db, "posts", userID, "likedPosts", postID.toString());
+    deleteDoc(postDoc);
+  };
+
   const renderPost = ({ item }) => (
     <View style={styles.postContainer}>
-      
-      <TouchableOpacity onPress={() => {
-        navigation.navigate('OtherProfile', {
-          user: item.user
-        })
-      }}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("OtherProfile", {
+            user: item.user,
+          });
+        }}
+      >
         <View style={styles.postHeader}>
           <Image style={styles.userImg} source={{ uri: item.userImgURL }} />
           <Text style={styles.username}>{item.username}</Text>
         </View>
       </TouchableOpacity>
 
-      
-      <TouchableOpacity onPress={() => {
-      navigation.navigate('Post', {
-        caption: item.postCaption,
-        image: item.postImgURL,
-        user: item.user,
-        itemList: item.itemList,
-        username: item.username,
-        userImgURL: item.userImgURL,
-        postNum: item.postNum,
-        likesNum: item.likesNum,
-        liked: item.liked,
-      })}
-    }>
-      <Image source={{ uri: item.postImgURL }} style={styles.postImage} />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Post", {
+            caption: item.postCaption,
+            image: item.postImgURL,
+            user: item.user,
+            itemList: item.itemList,
+            username: item.username,
+            userImgURL: item.userImgURL,
+            postNum: item.postNum,
+            likesNum: item.likesNum,
+            liked: item.liked,
+          });
+        }}
+      >
+        <Image source={{ uri: item.postImgURL }} style={styles.postImage} />
       </TouchableOpacity>
       <View style={styles.postFooter}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Text style={styles.likes}>{item.likesNum} like(s)</Text>
-          {
-            likedOr
-              ? (<TouchableOpacity onPress={() => onPressDislike({postID: item.postNum, userID: userUID})} style={{marginRight: 10}}>
-                  <Ionicons name="heart" color={'red'} size={30} />
-                </TouchableOpacity>)
-              : (<TouchableOpacity onPress={() => onPressLike({postID: item.postNum, userID: userUID})} style={{marginRight: 10}}>
-                  <Ionicons name="heart-outline" color={'black'} size={30} />
-                </TouchableOpacity>)
-          }
+          {likedOr ? (
+            <TouchableOpacity
+              onPress={() =>
+                onPressDislike({ postID: item.postNum, userID: userUID })
+              }
+              style={{ marginRight: 10 }}
+            >
+              <Ionicons name="heart" color={"red"} size={30} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() =>
+                onPressLike({ postID: item.postNum, userID: userUID })
+              }
+              style={{ marginRight: 10 }}
+            >
+              <Ionicons name="heart-outline" color={"black"} size={30} />
+            </TouchableOpacity>
+          )}
         </View>
-        
         <Text style={styles.caption}>{'"' + item.postCaption + '"'}</Text>
       </View>
     </View>
@@ -168,14 +161,12 @@ const LikedPostScreen = ({navigation}) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-    const onRefresh = useCallback(() => {
-      setRefreshing(true);
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 1285);
-    }, []);
-
-
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1285);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -202,7 +193,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingTop: 40,
   },
   postContainer: {
@@ -211,10 +202,10 @@ const styles = StyleSheet.create({
   postHeader: {
     paddingHorizontal: 10,
     marginBottom: 10,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   username: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 16,
     marginTop: 12,
   },
@@ -225,14 +216,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: "black",
     borderWidth: 3,
-
   },
   postFooter: {
     paddingHorizontal: 10,
     paddingTop: 10,
   },
   likes: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
     fontSize: 18,
   },
