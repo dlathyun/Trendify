@@ -44,7 +44,6 @@ const HomeScreen = ({ navigation }) => {
       const querySnapshot = await getDocs(q);
       const list = [];
       querySnapshot.forEach((doc) => {
-        //console.log(doc.id, " => ", doc.data())
         list.push(doc.data());
       });
 
@@ -112,7 +111,6 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const checkLiked = ({ postID }) => {
-    console.log(likedList);
     if (likedList.includes(postID.toString())) {
       return true;
     } else {

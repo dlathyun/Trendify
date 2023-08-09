@@ -38,7 +38,6 @@ const EditProfileScreen = ({ navigation }) => {
     const userRef = doc(db, "users", user.uid.toString());
     const documentSnapshot = await getDoc(userRef);
     if (documentSnapshot.exists()) {
-      console.log("User Data", documentSnapshot.data());
       setUserData(documentSnapshot.data());
       setName(documentSnapshot.data().username);
       setAbout(documentSnapshot.data().aboutUser);

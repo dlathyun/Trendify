@@ -83,7 +83,6 @@ const RequestScreen = ({ route, navigation }) => {
     if (!result.canceled) {
       setImgURI(result.assets[0].uri);
       const source = { uri: result.assets[0].uri };
-      console.log(source);
     } else {
       alert("Image not selected.");
     }
@@ -91,7 +90,6 @@ const RequestScreen = ({ route, navigation }) => {
 
   const handleAddRequest = async () => {
     let imgUrl = await uploadImage(imgURI, "na", true);
-    console.log(postNum);
     const itemRef = doc(
       db,
       "users",
@@ -99,7 +97,6 @@ const RequestScreen = ({ route, navigation }) => {
       "requests",
       postNum.toString()
     );
-    console.log(title);
     await setDoc(itemRef, {
       itemTitle: title,
       itemDescription: description,

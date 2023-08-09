@@ -90,7 +90,6 @@ const LikedPostScreen = ({ navigation }) => {
     const snapshot = await getCountFromServer(itemColl);
     const numItems = snapshot.data().count;
     const ori = postSnapShot.data().likesNum;
-    console.log(numItems);
     updateDoc(postRef, {
       likesNum: numItems - 1,
     });

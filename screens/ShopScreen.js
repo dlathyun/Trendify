@@ -60,13 +60,9 @@ const ShopScreen = ({ navigation }) => {
       const list = [];
       const querySnapshot = await getDocs(itemColl);
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
         list.push(doc.data());
       });
-
       setPosts(list);
-
-      console.log("Posts: ", posts);
     } catch (e) {
       console.log(e);
     }
