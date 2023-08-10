@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import { getAuth } from "firebase/auth";
 import { Alert } from "react-native";
 import { doc, deleteDoc } from "firebase/firestore";

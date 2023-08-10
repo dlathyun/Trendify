@@ -1,40 +1,36 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Button } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
-
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { View, Button } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import LoginScreen from "../screens/LoginScreen";
-import ProfileScreen from '../screens/ProfileScreen';
-import EditProfileScreen from '../screens/EditProfileScreen';
-import AddItemScreen from '../screens/AddItemScreen';
-import ShopScreen from '../screens/ShopScreen';
-import ItemScreen from '../screens/ItemScreen';
-import AddPostScreen from '../screens/AddPostScreen';
-import PostScreen from '../screens/PostScreen';
-import ChatScreen from '../screens/ChatScreen';
-import HomeScreen from '../screens/HomeScreen';
-import OtherProfileScreen from '../screens/OtherProfileScreen';
-import OtherShopScreen from '../screens/OtherShopScreen';
-import RequestScreen from '../screens/RequestScreen';
+import ProfileScreen from "../screens/ProfileScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import AddItemScreen from "../screens/AddItemScreen";
+import ShopScreen from "../screens/ShopScreen";
+import ItemScreen from "../screens/ItemScreen";
+import AddPostScreen from "../screens/AddPostScreen";
+import PostScreen from "../screens/PostScreen";
+import ChatScreen from "../screens/ChatScreen";
+import HomeScreen from "../screens/HomeScreen";
+import OtherProfileScreen from "../screens/OtherProfileScreen";
+import OtherShopScreen from "../screens/OtherShopScreen";
+import RequestScreen from "../screens/RequestScreen";
 
-import { getAuth } from 'firebase/auth';
-import EditPostScreen from '../screens/EditPostScreen';
-import ViewRequestScreen from '../screens/ViewRequestScreen';
-import LikedPostScreen from '../screens/LikedPostScreen';
-const auth = getAuth()
-const user = auth.currentUser
+import { getAuth } from "firebase/auth";
+import EditPostScreen from "../screens/EditPostScreen";
+import ViewRequestScreen from "../screens/ViewRequestScreen";
+import LikedPostScreen from "../screens/LikedPostScreen";
+const auth = getAuth();
+const user = auth.currentUser;
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const FeedStack = ({navigation}) => (
-  <Stack.Navigator
-    //screenOptions={{headerShown: false}}
-    >
+const FeedStack = ({ navigation }) => (
+  <Stack.Navigator>
     <Stack.Screen
       name="Main"
       component={HomeScreen}
@@ -46,12 +42,12 @@ const FeedStack = ({navigation}) => (
       name="Post"
       component={PostScreen}
       options={{
-        headerTitle: 'Post',
+        headerTitle: "Post",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -60,12 +56,12 @@ const FeedStack = ({navigation}) => (
       name="OtherProfile"
       component={OtherProfileScreen}
       options={{
-        headerTitle: '',
+        headerTitle: "",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -74,12 +70,26 @@ const FeedStack = ({navigation}) => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerTitle: '',
+        headerTitle: "",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="Item"
+      component={ItemScreen}
+      options={{
+        headerTitle: "Item",
+        headerBackTitleVisible: false,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -88,27 +98,27 @@ const FeedStack = ({navigation}) => (
       name="Request"
       component={RequestScreen}
       options={{
-        headerTitle: 'Submit Request',
+        headerTitle: "Submit Request",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
     />
-    
+
     <Stack.Screen
       name="Chat"
       component={ChatScreen}
       options={{
-        headerTitle: 'Chat',
+        headerTitle: "Chat",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -121,7 +131,7 @@ const ProfileStack = () => (
     <Stack.Screen
       name="Profile"
       component={ProfileScreen}
-      initialParams={{user: user}}
+      initialParams={{ user: user }}
       options={{
         headerShown: false,
       }}
@@ -130,12 +140,12 @@ const ProfileStack = () => (
       name="Edit Profile"
       component={EditProfileScreen}
       options={{
-        headerTitle: 'Edit Profile',
+        headerTitle: "Edit Profile",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -144,12 +154,12 @@ const ProfileStack = () => (
       name="ViewRequest"
       component={ViewRequestScreen}
       options={{
-        headerTitle: 'View Request',
+        headerTitle: "View Request",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -158,12 +168,12 @@ const ProfileStack = () => (
       name="Post"
       component={PostScreen}
       options={{
-        headerTitle: 'Post',
+        headerTitle: "Post",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -172,12 +182,12 @@ const ProfileStack = () => (
       name="EditPost"
       component={EditPostScreen}
       options={{
-        headerTitle: 'Edit Post',
+        headerTitle: "Edit Post",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -186,34 +196,34 @@ const ProfileStack = () => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerTitle: '',
+        headerTitle: "",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
     />
-    {/* <Stack.Screen
-      name="Shop Page"
-      component={ShopScreen}
+    <Stack.Screen
+      name="Item"
+      component={ItemScreen}
       options={{
-        headerTitle: 'View My Shop',
+        headerTitle: "Item",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
-    /> */}
+    />
   </Stack.Navigator>
 );
 
-const ShopStack = ({navigation}) => (
+const ShopStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Shop"
@@ -226,12 +236,12 @@ const ShopStack = ({navigation}) => (
       name="Add Item"
       component={AddItemScreen}
       options={{
-        headerTitle: 'Add Item',
+        headerTitle: "Add Item",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -240,12 +250,12 @@ const ShopStack = ({navigation}) => (
       name="Item"
       component={ItemScreen}
       options={{
-        headerTitle: 'Item',
+        headerTitle: "Item",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -254,12 +264,12 @@ const ShopStack = ({navigation}) => (
       name="Chat"
       component={ChatScreen}
       options={{
-        headerTitle: 'Chat',
+        headerTitle: "Chat",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -267,7 +277,7 @@ const ShopStack = ({navigation}) => (
   </Stack.Navigator>
 );
 
-const LikedPostStack = ({navigation}) => (
+const LikedPostStack = ({ navigation }) => (
   <Stack.Navigator>
     <Stack.Screen
       name="Liked Post"
@@ -280,12 +290,12 @@ const LikedPostStack = ({navigation}) => (
       name="Post"
       component={PostScreen}
       options={{
-        headerTitle: 'Post',
+        headerTitle: "Post",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -294,12 +304,12 @@ const LikedPostStack = ({navigation}) => (
       name="OtherProfile"
       component={OtherProfileScreen}
       options={{
-        headerTitle: '',
+        headerTitle: "",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -308,12 +318,26 @@ const LikedPostStack = ({navigation}) => (
       name="OtherShop"
       component={OtherShopScreen}
       options={{
-        headerTitle: '',
+        headerTitle: "",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
+          elevation: 0,
+        },
+      }}
+    />
+    <Stack.Screen
+      name="Item"
+      component={ItemScreen}
+      options={{
+        headerTitle: "Item",
+        headerBackTitleVisible: false,
+        headerTitleAlign: "center",
+        headerStyle: {
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -322,12 +346,12 @@ const LikedPostStack = ({navigation}) => (
       name="Request"
       component={RequestScreen}
       options={{
-        headerTitle: 'Submit Request',
+        headerTitle: "Submit Request",
         headerBackTitleVisible: false,
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: '#fff',
-          shadowColor: '#fff',
+          backgroundColor: "#fff",
+          shadowColor: "#fff",
           elevation: 0,
         },
       }}
@@ -339,40 +363,24 @@ const AppStack = () => {
   const getTabBarVisibility = (route) => {
     const routeName = route.state
       ? route.state.routes[route.state.index].name
-      : '';
+      : "";
   };
 
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: '#20b2aa',
-      }}>
-      {/* <Tab.Screen
-        name="Home"
-        component={FeedStack}
-        options={({route}) => ({
-          tabBarLabel: 'Home',
-          // tabBarVisible: route.state && route.state.index === 0,
-          tabBarIcon: ({color, size}) => (
-            <Icon
-              name="home-outline"
-              color={color}
-              size={size}
-            />
-          ),
-        })}
-      /> */}
-
-    <Tab.Screen
+        tabBarActiveTintColor: "#20b2aa",
+      }}
+    >
+      <Tab.Screen
         name="Home"
         component={FeedStack}
         options={{
           // tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <View>
               <Ionicons name="home-outline" color={color} size={size} />
             </View>
- 
           ),
         }}
       />
@@ -381,7 +389,7 @@ const AppStack = () => {
         component={ProfileStack}
         options={{
           // tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <View>
               <Ionicons name="person-outline" color={color} size={size} />
             </View>
@@ -392,27 +400,22 @@ const AppStack = () => {
         name="Add Post"
         component={AddPostScreen}
         options={{
-          // tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <View>
               <Ionicons name="add-circle-outline" color={color} size={size} />
             </View>
-            
           ),
         }}
       />
-      
-      
+
       <Tab.Screen
         name="My Shop"
         component={ShopStack}
         options={{
-          // tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <View>
               <Ionicons name="pricetag-outline" color={color} size={size} />
             </View>
-            
           ),
         }}
       />
@@ -420,12 +423,10 @@ const AppStack = () => {
         name="Liked Posts"
         component={LikedPostStack}
         options={{
-          // tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <View>
               <Ionicons name="heart-circle-outline" color={color} size={size} />
             </View>
-            
           ),
         }}
       />

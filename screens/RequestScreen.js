@@ -89,6 +89,13 @@ const RequestScreen = ({ route, navigation }) => {
   };
 
   const handleAddRequest = async () => {
+    if (title == "" || description == "" || price == "") {
+      return Alert.alert("Please ensure all fields are present!");
+    }
+
+    if (parseFloat(price) < 0) {
+      return Alert.alert("Please ensure that the price is non-negative!");
+    }
     let imgUrl = await uploadImage(imgURI, "na", true);
     const itemRef = doc(
       db,

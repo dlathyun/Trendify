@@ -8,7 +8,6 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { db } from "../firebaseConfig";
 import {
   collection,
   getCountFromServer,
@@ -18,6 +17,7 @@ import {
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { getAuth } from "firebase/auth";
+import { db } from "../firebaseConfig";
 
 const ShopScreen = ({ navigation }) => {
   const renderPost = ({ item }) => (
@@ -55,7 +55,7 @@ const ShopScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchPosts = async () => {
-
+    const itemColl = collection(db, "users", user.uid, "items");
     try {
       const list = [];
       const querySnapshot = await getDocs(itemColl);

@@ -13,13 +13,7 @@ import Constants from "expo-constants";
 import { useState } from "react";
 import { getAuth } from "firebase/auth";
 import { db } from "../firebaseConfig";
-import {
-  updateDoc,
-  doc,
-  getDoc,
-  getCountFromServer,
-  collection,
-} from "firebase/firestore";
+import { updateDoc, doc, getDoc } from "firebase/firestore";
 import { Alert } from "react-native";
 import { useEffect } from "react";
 
@@ -71,15 +65,6 @@ const EditPostScreen = ({ route, navigation }) => {
       postCaption: caption,
       itemList: itemList,
     });
-
-    if (caption == "") {
-      setErrorMessage("Caption cannot be empty!");
-      return Alert.alert(errorMessage);
-    }
-    if (itemList.length == 0) {
-      setErrorMessage("Item list cannot be empty!");
-      return Alert.alert(errorMessage);
-    }
 
     setCaption("");
     itemList.length = 0;

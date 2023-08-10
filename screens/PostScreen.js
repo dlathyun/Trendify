@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import { useEffect, useState } from "react";
@@ -13,14 +7,7 @@ import { Alert } from "react-native";
 import { SafeAreaView, ScrollView } from "react-native";
 
 const PostScreen = ({ navigation, route }) => {
-  const {
-    caption,
-    image,
-    user,
-    itemList,
-    username,
-    postNum,
-  } = route.params;
+  const { caption, image, user, itemList, username, postNum } = route.params;
   const [userData, setUserData] = useState("");
 
   const getUser = async () => {
@@ -51,8 +38,9 @@ const PostScreen = ({ navigation, route }) => {
       deleteDoc(postDoc);
       deleteDoc(postOtherDoc);
       Alert.alert("Post successfully deleted!");
+      navigation.goBack();
     }
-    navigation.goBack();
+    
     return null;
   };
 

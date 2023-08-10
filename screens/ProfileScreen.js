@@ -71,7 +71,7 @@ const ProfileScreen = ({ navigation }) => {
     const itemColl = collection(db, "posts", user.uid, "ownPosts");
     const snapshot = await getCountFromServer(itemColl);
     const numItems = snapshot.data().count + 1;
-    
+
     try {
       const list = [];
       const querySnapshot = await getDocs(itemColl);
@@ -80,7 +80,6 @@ const ProfileScreen = ({ navigation }) => {
       });
 
       setPosts(list);
-
     } catch (e) {
       console.log(e);
     }

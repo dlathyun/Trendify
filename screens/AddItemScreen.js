@@ -42,6 +42,14 @@ const AddItemScreen = ({ navigation }) => {
   const user = auth.currentUser;
 
   const handleAddItem = async () => {
+    if (title == "" || description == "" || price == "") {
+      return Alert.alert("Please ensure all fields are present!");
+    }
+
+    if (parseFloat(price) < 0) {
+      return Alert.alert("Please ensure that the price is non-negative!");
+    }
+
     let imgUrl = await uploadImage(img, "na", true);
 
     const itemColl = collection(db, "users", user.uid, "items");

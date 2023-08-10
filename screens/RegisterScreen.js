@@ -11,10 +11,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { ScrollView } from "react-native-gesture-handler";
 import { Dimensions } from "react-native";
 
@@ -46,11 +43,10 @@ const RegisterScreen = () => {
       })
       .catch((error) => {
         if (error.code == "auth/email-already-in-use") {
-          setErrorMessage("You already have an account!");
-        } else {
-          setErrorMessage(error.message);
+          Alert.alert("You already have an account!");
+        } else if (error.code == "auth/invalid-email") {
+          Alert.alert("Invalid email!");
         }
-        return Alert.alert(errorMessage);
       });
   };
 

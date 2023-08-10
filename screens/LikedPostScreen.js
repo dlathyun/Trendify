@@ -60,7 +60,6 @@ const LikedPostScreen = ({ navigation }) => {
     navigation.addListener("focus", () => setLoading(!loading));
   }, [navigation, loading]);
 
-
   const onPressLike = async ({ postID, userID }) => {
     const likeRef = doc(db, "wholePosts", postID.toString(), "likes", userID);
     setDoc(likeRef, {});
